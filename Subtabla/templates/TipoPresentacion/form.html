@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}CLIENTE{% endblock %}
+{% block body %}
+<!--**********************************
+            Content body start
+        ***********************************-->
+{% block head %}CATALOGO{% endblock %}
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row" style="padding-right: 0 !important;">
+            <div class="col-sm-12 col-xl-12 col-xxl-12" style="padding-right: 0 !important;">
+                <div class="card">
+
+                    <div class="card-header d-block d-sm-flex border-0">
+                            <h4 class="card-title mb-2">
+                                <a href="{% url 'subtabla:T_Tipo_Presentacion'%}">
+                                    <i class="bi bi-arrow-left-circle text-black fs-28"></i>
+                                </a>
+                                <b>FORMULARIO TIPO PRESENTACION</b>
+                            </h4>
+                    </div>
+                    <hr>
+                    <div class="card-body tab-content px-4 pt-2">
+                        <div class="tab-pane active show fade" id="monthly" role="tabpanel">
+
+                            <form action="{% url 'subtabla:G_Tipo_Presentacion'%}" method="POST" autocomplete="off">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    {% if clave is not None %}
+                                    <input type="hidden" class=" form-control mb-3" name="clave" value="{{ clave }}">
+                                    {% else %}
+                                    <input type="hidden" class=" form-control mb-3" name="clave"
+                                        value="{{ ultimo_folio }}">
+                                    {% endif %}
+                                    <input type="hidden" class="form-control" name="tecnico"
+                                        value="{{ user.first_name }} {{user.last_name}}">
+                                    <div class="row">
+                                        <div class="col-sm-12 col-md-4 col-lg col-xl mb-3">
+                                            <h6 class="h6-form">DESCRIPCIÓN <label>*</label></h6>
+                                            {% if errorCol is not None %}
+                                            <input type="text" autofocus name="descripcion"
+                                                class=" form-control is-invalid"
+                                                placeholder="Ingrese la unidad medida (obligatorio)" required>
+                                            <div class="invalid-feedback  mb-3">
+                                                La unidad de medida ya se registro anteriormente
+                                            </div>
+                                            {% else %}
+                                            <input type="text" autofocus name="descripcion" class="form-control input"
+                                                placeholder="Ingrese la unidad medida (obligatorio)" required>
+                                            {% endif %}
+                                        </div>
+                                        <div class="col-sm-12 col-md-4 col-lg col-xl mb-3">
+                                            <h6 class="h6-form">CANTIDAD <label>*</label></h6>
+                                            <input type="text" name="cantidad" class=" form-control"
+                                                placeholder="Ingrese la cantidad (obligatorio)" required>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-12 col-md-4 col-lg col-xl mb-3">
+                                            <h6 class="h6-form">UNIDAD MEDIDA <label>*</label></h6>
+                                            <select class="select2 form-control col-12" name="unidad" required>
+                                                {% for Unidades in FUnidades %}
+                                                <option value="{{ Unidades.ID }}">{{ Unidades.Abreviacion }} -
+                                                     {{ Unidades.Descripcion }}
+                                                </option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <div class="col-sm-12 col-md-4 col-lg col-xl mb-3">
+                                            <h6 class="h6-form">VISIBLE <label>*</label></h6>
+                                            <select class="select2 form-control col-12" name="visible" required>
+                                                <option value="Si">Si</option>
+                                                <option value="No">No</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <button type="submit" class="btn btn-primary agregarBoton"
+                                            name="agregar">Guardar y
+                                            agregar otro</button>
+                                        <button type="submit" class="btn btn-success salirBoton" name="salir">Guardar y
+                                            salir</button>
+                                        <a href="{% url 'subtabla:T_Tipo_Presentacion'%}">
+                                            <button type="button" class="btn btn-danger cancelarBoton">Cancelar</button>
+                                        </a>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

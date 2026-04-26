@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}CLIENTE{% endblock %}
+{% block body %}
+<!--**********************************
+            Content body start
+        ***********************************-->
+{% block head %}CATALOGO{% endblock %}
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row" style="padding-right: 0 !important;">
+            <div class="col-sm-12 col-xl-12 col-xxl-12" style="padding-right: 0 !important;">
+                <div class="card">
+
+                    <div class="card-header d-block d-sm-flex border-0">
+                        <h4 class="card-title mb-2">
+                            <a href="{% url 'proceso:T_Solicitud_Servidos'%}">
+                                <i class="bi bi-arrow-left-circle text-black fs-28"></i>
+                            </a>
+                            <b>MOSTRAR SOLICITUD SERVIDO</b>
+                        </h4>
+                    </div>
+                    <hr>
+                    <div class="card-body tab-content px-4 pt-2">
+                        <form action="{% url 'proceso:G_Solicitud_Servidos' %}" method="POST" autocomplete="off"
+                            style="justify-content: flex-end;">
+                            <div class="tab-pane active show fade" id="monthly" role="tabpanel">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <div class="row" style="justify-content: flex-end;">
+                                        <div class="col-sm-12 col-md-12 col-lg-3 col-xl-3 mb-3">
+                                            <h6 class="h6-form">PORCENTAJE DESAYUNO: {{porcentaje}} %</h6>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane active show fade mx-3" id="monthly" role="tabpanel">
+                                <div class="table-responsive">
+                                    <table class="table table-responsive-md card-table transactions-table" id="miTabla">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-black fs-16 font-w600 th-responsive" colspan="3">
+                                                    CORRAL
+                                                </th>
+                                                <th class="text-black fs-16 font-w600 th-responsive" colspan="3">
+                                                    FORMULA
+                                                </th>
+                                                <th class="text-black fs-16 font-w600 th-responsive" colspan="3">
+                                                    CANTIDAD ANIMALES
+                                                </th>                                                
+                                                <th class="text-black fs-16 font-w600 th-responsive" colspan="3">
+                                                    CANTIDAD SOL / SER (KG)
+                                                </th>
+                                                <th class="text-black fs-16 font-w600 th-responsive" colspan="3">
+                                                    CANTIDAD DESAYUNO (KG)
+                                                </th>
+                                                <th class="text-black fs-16 font-w600 th-responsive" colspan="3">
+                                                    CANTIDAD CENA (KG)
+                                                </th>
+                                                <!-- <th class="text-black fs-16 font-w600 th-responsive" colspan="3">
+                                                    SE SIRVE
+                                                </th> -->
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for Dato in TEServidos %}
+                                            <tr>
+                                                <td colspan="3">
+                                                    <span class="fs-16 text-black font-w400">
+                                                        {{Dato.IDCorral_id__Descripcion}}
+                                                    </span>
+                                                </td>
+                                                <td colspan="3">
+                                                    <span class="fs-16 text-black font-w400">
+                                                        {{Dato.IDProducto_id__Descripcion}}
+                                                    </span>
+                                                </td>
+                                                <td colspan="3">
+                                                    <span class="fs-16 text-black font-w400">
+                                                        {{Dato.CantidadAnimales}}
+                                                    </span>
+                                                </td>                                                
+                                                <td colspan="3">
+                                                    {{Dato.CantidadSolicitada}} KG /
+                                                    <span class="fs-16 text-black font-w400">
+                                                        {{Dato.calcSuma}} KG
+                                                    </span>
+                                                    <br>
+                                                    <small class="text-muted">
+                                                        {{Dato.FechaSol|date:'Y-M-d' }}
+                                                    </small>
+                                                </td>
+                                                <td colspan="3">
+                                                    {{Dato.calcCantidad1}} KG /
+                                                    <span class="fs-16 text-black font-w400">
+                                                        {{Dato.Cantidad1}} KG
+                                                    </span>
+                                                    <br>
+                                                    <small class="text-muted">
+                                                        {{Dato.FechaServida1|date:'H:i A'  }}
+                                                    </small>
+                                                </td>
+                                                <td colspan="3">
+                                                    {{Dato.calcCantidad2}} KG /
+                                                    <span class="fs-16 text-black font-w400">
+                                                        {{Dato.Cantidad2}} KG
+                                                    </span>
+                                                    <br>
+                                                    <small class="text-muted">
+                                                        {{Dato.FechaServida2|date:'H:i A'  }}
+                                                    </small>
+                                                </td>
+                                                <!-- <td colspan="3">
+                                                    <span class="fs-16 text-black font-w400">
+                                                        {{Dato.SeSirve}}
+                                                    </span>
+                                                </td> -->
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

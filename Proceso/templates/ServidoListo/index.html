@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}SERVIDOS{% endblock %}
+{% block body %}
+<!--**********************************
+            Content body start
+        ***********************************-->
+{% block head %}PROCESO: SERVIDO{% endblock %}
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row" style="padding-right: 0 !important;">
+            <div class="col-sm-12 col-xl-12 col-xxl-12" style="padding-right: 0 !important;">
+                <div class="card">
+
+                    <div class="card-header d-block d-sm-flex border-0">
+                        <h4 class="card-title mb-2">
+                            <a href="{% url 'aplicacion:Menu_Presentacion' %}#Proceso">
+                                <i class="bi bi-arrow-left-circle text-black fs-28"></i>
+                            </a>
+                            <b>SERVIDOS:</b> - CORRALES ATENDIDOS
+
+                        </h4>
+                       
+
+
+                    </div>
+                    <div class="card-body tab-content p-0">
+                        <div class="card-tabs my-5 mt-sm-0 px-5 mx-3">
+                            <ul class="nav nav-tabs w-100 d-flex justify-content-between">
+                                <li class="nav-item">
+                                    <a href="{% url 'proceso:T_Solicitud_Servidos' %}" class="nav-link">Corrales
+                                        pendientes</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{% url 'proceso:FT_Consolidacion' %}" class="nav-link">Cargar en tolva</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{% url 'proceso:T_Servidos' %}" class="nav-link">Captura manual</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link active">Corrales servidos</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="tab-pane active show fade" id="monthly" role="tabpanel">
+                            <div class="table-responsive">
+                                <table class="table table-responsive-md card-table transactions-table" id="miTabla">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-black fs-16 font-w600 th-responsive">
+                                                FOLIO
+                                            </th>
+                                            <th class="text-black fs-16 font-w600 th-responsive">
+                                                CLIENTE
+                                            </th>
+                                            <th class="text-black fs-16 font-w600 th-responsive">
+                                                CORRAL
+                                            </th>
+                                            <th class="text-black fs-16 font-w600 th-responsive">
+                                                PRODUCTO
+                                            </th>
+                                            <th class="text-black fs-16 font-w600 th-responsive">
+                                                ESTATUS
+                                            </th>
+                                            <th class="text-black fs-16 font-w600 th-responsive">
+                                                CANTIDAD
+                                            </th>
+                                            <th class="text-black fs-16 font-w600 th-responsive">
+                                                CANTIDAD SERVIDA
+                                            </th>
+                                            <th class="text-black fs-16 font-w600 th-responsive">
+                                                FECHA
+                                            </th>
+                                            <th class="text-black fs-16 font-w600 th-responsive">
+                                                FECHA SERVIDA
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for Dato in TServidos %}
+                                        <tr>
+                                            <td>
+                                                <span class="fs-16 text-black font-w400">
+                                                    {{Dato.Folio}}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <span class="fs-16 text-black font-w400">
+                                                    {{Dato.IDCliente_id__Nombre}}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <span class="fs-16 text-black font-w400">
+                                                    {{Dato.IDCorral_id__Descripcion}}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <span class="fs-16 text-black font-w400">
+                                                    {{Dato.IDProducto_id__Descripcion}}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <span class="fs-16 text-black font-w400">
+                                                    {{Dato.IDEstatus_id__Descripcion}}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <span class="fs-16 text-black font-w400">
+                                                    {{Dato.CantidadSolicitada}}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <span class="fs-16 text-black font-w400">
+                                                    {{Dato.CantidadServida}}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <span class="fs-16 text-black font-w400">
+                                                    {{Dato.Fecha}}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <span class="fs-16 text-black font-w400">
+                                                    {{Dato.FechaServida}}
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

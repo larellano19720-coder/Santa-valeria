@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    {% load static %}
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+    <title>{% block title %}GANADERA{% endblock %}</title>
+
+    <!-- Estilos -->
+    <link href="{% static 'vendor/jquery-nice-select/css/nice-select.css' %}" rel="stylesheet">
+    <!-- <link rel="stylesheet" href="{% static 'vendor/nouislider/nouislider.min.css' %}"> -->
+    <link rel="stylesheet" href="{% static 'css/jquery.dataTables.min.css' %}">
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+    <link href="{% static 'css/button.css' %}" rel="stylesheet">
+    <link href="{% static 'css/buttons.css' %}" rel="stylesheet">
+    <link href="{% static 'ruta/select2/select2.min.css' %}" rel="stylesheet" />
+    <!-- <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet"> -->
+
+</head>
+
+<body>
+    <style>
+        li.active a {
+            background-color: #e1e1e1;
+            font-weight: bold;
+            color: #000;
+        }
+
+        .dataTables_filter input[type="search"] {
+            border: 1px solid black;
+            background-color: white;
+            color: black;
+            padding: 6px 10px;
+            border-radius: 4px;
+            outline: none;
+        }
+
+        /* Evita el scroll vertical en el wrapper de DataTables */
+        .dataTables_wrapper {
+            overflow-y: hidden !important;
+            max-height: none !important;
+        }
+
+        .table-responsive {
+            padding: 0 20px;
+
+        }
+
+        /* Y en el contenedor de tabla, si se usa */
+        .table-responsive-md {
+            overflow-y: hidden !important;
+            max-height: none !important;
+        }
+
+        th,
+        td {
+            text-align: center;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .agua-card {
+            background-image: url('ruta-a-tu-imagen.jpg');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            /* Asegura legibilidad */
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< SELECT PARA LOS FORMULARIOS <>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> */
+        .select2-dropdown {
+            background-color: white;
+            color: black;
+        }
+
+        .select2-container--default .select2-results__option--highlighted[aria-selected] {
+            background-color: rgb(0, 140, 255);
+            color: white
+        }
+
+        .select2-container--default .select2-selection--single {
+            background-color: white;
+            border: 1px solid #aaa;
+            border-radius: 4px
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__rendered {
+            color: black;
+            line-height: 28px
+        }
+
+        .select2-container--default .select2-results__option[aria-selected=true] {
+            background-color: rgb(226, 226, 226);
+            color: black;
+        }
+
+        .select2-container--default .select2-results__option[aria-disabled=true] {
+            color: black;
+        }
+
+        input {
+            padding: 5px 8px !important;
+            /* Un poco de espacio lateral */
+            height: 40px !important;
+            /* Ajusta según tu necesidad */
+            line-height: 1;
+            /* Línea más compacta */
+            font-size: 14px;
+            /* Texto más pequeño ayuda */
+            border-radius: 4px;
+            /* Opcional: esquinas redondeadas */
+            border: 1px solid #ccc;
+            /* Control de borde */
+            box-sizing: border-box;
+            /* Asegura que padding se incluya en el height */
+        }
+
+
+    </style>
+
+
+    <!--**********************************
+        Main wrapper start
+    ***********************************-->
+    <div id="main-wrapper" class="show">
+
+        <!--**********************************
+            Nav header start
+        ***********************************-->
+        <div class="nav-header">
+            <a href="{% url 'aplicacion:Menu_Presentacion' %}#Inicio" class="brand-logo">
+                <svg class="logo-abbr" width="53" height="53" viewBox="0 0 53 53">
+                    <path class="svg-logo-primary-path"
+                        d="M48.3418 41.8457H41.0957C36.8148 41.8457 33.332 38.3629 33.332 34.082C33.332 29.8011 36.8148 26.3184 41.0957 26.3184H48.3418V19.2275C48.3418 16.9408 46.4879 15.0869 44.2012 15.0869H4.14062C1.85386 15.0869 0 16.9408 0 19.2275V48.8594C0 51.1462 1.85386 53 4.14062 53H44.2012C46.4879 53 48.3418 51.1462 48.3418 48.8594V41.8457Z"
+                        fill="#5BCFC5" />
+                    <path class="svg-logo-primary-path"
+                        d="M51.4473 29.4238H41.0957C38.5272 29.4238 36.4375 31.5135 36.4375 34.082C36.4375 36.6506 38.5272 38.7402 41.0957 38.7402H51.4473C52.3034 38.7402 53 38.0437 53 37.1875V30.9766C53 30.1204 52.3034 29.4238 51.4473 29.4238ZM41.0957 35.6348C40.2382 35.6348 39.543 34.9396 39.543 34.082C39.543 33.2245 40.2382 32.5293 41.0957 32.5293C41.9532 32.5293 42.6484 33.2245 42.6484 34.082C42.6484 34.9396 41.9532 35.6348 41.0957 35.6348Z"
+                        fill="#5BCFC5" />
+                </svg>
+
+                <p class="brand-title" width="124px" height="33px" style="font-size: 30px;">GANADERA</p>
+            </a>
+            <div class="nav-control">
+                <div class="hamburger">
+                    <span class="line"></span><span class="line"></span><span class="line"></span>
+                </div>
+            </div>
+        </div>
+        <!--**********************************
+            Nav header end
+        ***********************************-->
+
+
+
+        <!--**********************************
+            Header start
+        ***********************************-->
+        <div class="header ocultar">
+            <div class="header-content">
+                <nav class="navbar navbar-expand">
+                    <div class="collapse navbar-collapse justify-content-between">
+                        <div class="header-left">
+                            <div class="dashboard_bar">
+                                MENÚ
+                            </div>
+                        </div>
+                        <ul class="navbar-nav header-right">
+
+                            {% block generar %}
+
+                            {% endblock %}
+                        </ul>
+
+                    </div>
+                </nav>
+            </div>
+
+        </div>
+        <!--**********************************
+            Header end ti-comment-alt
+        ***********************************-->
+
+        <!--**********************************
+            Sidebar start
+        ***********************************-->
+        <div class="dlabnav">
+            <div class="dlabnav-scroll">
+                <ul class="metismenu" id="menu">
+                    <li class="dropdown header-profile">
+                        <a class="nav-link" href="#">
+                            <img src="{% static 'images/catalogos/perfil.png' %}" width="20" alt="" />
+                            <div class="header-info ms-3">
+                                <span class="font-w600 center">Hola, <b>
+                                        {{user.first_name}}<br>{{user.last_name}}</b></span>
+                                <small class="text-end font-w400">{{user.username}}</small>
+                            </div>
+                        </a>
+
+                    </li>
+                    <li><a href="{% url 'aplicacion:Menu_Presentacion' %}#Inicio" class="ai-icon" aria-expanded="false">
+                            <i class="flaticon-381-home"></i>
+                            <span class="nav-text">INICIO</span>
+                        </a>
+                    </li>
+                    <li><a href="{% url 'aplicacion:Menu_Presentacion' %}#Catalogo" class="ai-icon"
+                            aria-expanded="false">
+                            <i class="flaticon-381-layer"></i>
+                            <span class="nav-text">CATÁLOGO</span>
+                        </a>
+                    </li>
+                    <li><a href="{% url 'aplicacion:Menu_Presentacion' %}#Proceso" class="ai-icon"
+                            aria-expanded="false">
+                            <i class="flaticon-381-settings-2"></i>
+                            <span class="nav-text">PROCESOS</span>
+                        </a>
+                    </li>
+                    <li><a href="{% url 'aplicacion:Menu_Presentacion' %}#Reporte" class="ai-icon"
+                            aria-expanded="false">
+                            <i class="fa fa-file-alt"></i>
+                            <span class="nav-text">REPORTE</span>
+                        </a>
+                    </li>
+                    <li><a href="{% url 'aplicacion:Menu_Presentacion' %}#Subtabla" class="ai-icon"
+                            aria-expanded="false">
+                            <i class="flaticon-381-networking"></i>
+                            <span class="nav-text">SUBTABLAS</span>
+                        </a>
+                    </li>
+
+
+                </ul>
+            </div>
+        </div>
+
+        {% if ServiciosWeb.Servicio == True %}
+        {% block body %}
+
+        {% endblock %}
+
+        {% else %}
+        <script>
+            window.location.href = "{% url 'aplicacion:SinServicio' %}";
+
+        </script>
+        {% endif %}
+        <div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1080;">
+            {% if messages %}
+            {% for message in messages %}
+            <div class="toast align-items-center text-bg-{% if 'error' in message.tags %}danger{% elif 'success' in message.tags %}success{% else %}primary{% endif %} border-0 mb-2"
+                role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true" data-bs-delay="5000">
+                <div class="d-flex">
+                    <div class="toast-body d-flex align-items-center gap-2">
+                        {% if 'error' in message.tags %}
+                        <i class="bi bi-x-circle-fill"></i>
+                        {% elif 'success' in message.tags %}
+                        <i class="bi bi-check-circle-fill"></i>
+                        {% else %}
+                        <i class="bi bi-info-circle-fill"></i>
+                        {% endif %}
+                        {{ message }}
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+                        aria-label="Close"></button>
+                </div>
+            </div>
+            {% endfor %}
+            {% endif %}
+        </div>
+
+
+    </div>
+    <!--**********************************
+        Main wrapper end
+    ***********************************-->
+
+    <!--**********************************
+        Scripts
+    ***********************************-->
+    <!-- Scripts: jQuery primero -->
+
+
+    <!-- Carga de librerías en orden correcto -->
+    <script src="{% static 'jquery/jquery-3.6.0.min.js' %}"></script>
+
+    <script src="{% static 'vendor/apexchart/apexchart.js' %}"></script>
+    <script src="{% static 'vendor/global/global.min.js' %}"></script>
+    <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'ruta/select2/select2.min.js' %}"></script>
+    <script src="{% static 'vendor/jquery-nice-select/js/jquery.nice-select.min.js' %}"></script>
+    <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+    <!-- <script src="{% static 'js/grafica.js' %}"></script> -->
+
+    <!-- Otros scripts -->
+    <script src="{% static 'js/input-not-real.js' %}"></script>
+    <script src="{% static 'js/dashboard/dashboard-1.js' %}"></script>
+    <script src="{% static 'js/custom.min.js' %}"></script>
+    <script src="{% static 'js/dlabnav-init.js' %}"></script>
+    <script src="{% static 'js/demo.js' %}"></script>
+    <script src="{% static 'js/styleSwitcher.js' %}"></script>
+    <script src="{% static 'jquery/jquery.dataTables.min.js' %}"></script>
+
+    <script>
+        $(document).ready(function () {
+            $(".table").DataTable({
+                "pageLength": 20,
+                "lengthMenu": [[20, 50, 100, 150, 200], [20, 50, 100, 150, 200]],
+                "autoWidth": false,
+                "language": {
+                    "url": "{% static 'js/Spanish.json' %}"
+                }
+            });
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const collapseElements = document.querySelectorAll('.nav-link[data-bs-toggle="collapse"]');
+
+            collapseElements.forEach(function (element) {
+                element.addEventListener('click', function () {
+                    const targetId = element.getAttribute('data-bs-target');
+                    const targetElement = document.querySelector(targetId);
+
+                    // Si el target ya está abierto, no hacer nada
+                    if (targetElement.classList.contains('show')) {
+                        return;
+                    }
+
+                    // Colapsar otros elementos
+                    const allCollapseElements = document.querySelectorAll('.nav-content.collapse.show');
+                    allCollapseElements.forEach(function (collapse) {
+                        collapse.classList.remove('show');
+                    });
+                });
+            });
+        });
+
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const toastElList = [].slice.call(document.querySelectorAll('.toast'));
+            toastElList.forEach(function (toastEl) {
+                new bootstrap.Toast(toastEl).show();
+            });
+        });
+    </script>
+    <!-- Activar Select2 correctamente al final -->
+    <script>
+        $(function () {
+            $('.select2').select2();
+        });
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Función para actualizar la clase activa según el hash
+            function activarSeccionPorHash() {
+                // Remueve la clase 'active' de todos los <li>
+                document.querySelectorAll("li").forEach(li => li.classList.remove("active"));
+
+                // Obtiene el hash de la URL (sin el #)
+                const hash = window.location.hash;
+
+                if (hash) {
+                    // Busca el <a> cuyo href termina con ese hash
+                    const link = document.querySelector(`a[href$="${hash}"]`);
+                    if (link) {
+                        // Agrega la clase 'active' al <li> contenedor
+                        link.closest("li").classList.add("active");
+                    }
+                }
+            }
+
+            // Activar cuando se carga la página
+            activarSeccionPorHash();
+
+            // También actualizar cuando el hash cambie (por scrolleo manual o JS)
+            window.addEventListener("hashchange", activarSeccionPorHash);
+        });
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}CLIENTE{% endblock %}
+{% block body %}
+<!--**********************************
+            Content body start
+        ***********************************-->
+{% block head %}CATALOGO{% endblock %}
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row" style="padding-right: 0 !important;">
+            <div class="col-sm-12 col-xl-12 col-xxl-12" style="padding-right: 0 !important;">
+                <div class="card">
+                    <div class="card-header d-block d-sm-flex border-0">
+                            <h4 class="card-title mb-2">
+                                <a href="{% url 'subtabla:T_Estatus'%}">
+                                    <i class="bi bi-arrow-left-circle text-black fs-28"></i>
+                                </a>
+                                <b>EDITAR ESTATUS #{{TEEstatus.Clave}}</b>
+                            </h4>
+                    </div>
+                    <hr>
+                    <div class="card-body tab-content px-4 pt-2">
+                        <div class="tab-pane active show fade" id="monthly" role="tabpanel">
+                            <form action="{% url 'subtabla:A_Estatus'%}" method="POST" autocomplete="off">{% csrf_token %}
+                                <div class="form-group">
+                                    <input type="hidden" name="id" value="{{TEEstatus.ID}}">
+                                    <input type="hidden" name="clave" value="{{TEEstatus.Clave}}">
+                                    <input type="hidden" class="form-control" name="tecnico"
+                                        value="{{ user.first_name }} {{user.last_name}}">
+                                    <div class="row ">
+                                        <div class="col-sm-12 col-md-4 col-lg col-xl mb-3">
+                                            <h6 class="h6-form">DESCRIPCIÓN <label>*</label></h6>
+                                            <input type="text" name="descripcion" value="{{TEEstatus.Descripcion}}"
+                                                class="form-control input" placeholder="Ingrese el tipo de animal"
+                                                required>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <button type="submit" class="btn btn-success">Actualizar</button>
+                                        <a href="{% url 'subtabla:T_Estatus'%}" class="btn btn-danger">Cancelar</a>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

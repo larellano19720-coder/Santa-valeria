@@ -1,0 +1,216 @@
+        .pdf {
+            background: linear-gradient(135deg, #ff4d4d, #c82333);
+            color: #fff;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 12px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: 0.3s ease;
+            box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+        }
+
+        .pdf:hover {
+            transform: translateY(-3px) scale(1.03);
+            box-shadow: 0 6px 18px rgba(220, 53, 69, 0.5);
+        }
+
+        .pdf:active {
+            transform: scale(0.96);
+        }
+
+        .excel {
+            background: linear-gradient(135deg, #2ecc71, #1e7e34);
+            color: #fff;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 12px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: 0.3s ease;
+            box-shadow: 0 4px 12px rgba(33, 115, 70, 0.3);
+        }
+
+        .excel:hover {
+            transform: translateY(-3px) scale(1.03);
+            box-shadow: 0 6px 18px rgba(33, 115, 70, 0.5);
+        }
+
+        .excel:active {
+            transform: scale(0.96);
+        }
+
+        .manual {
+            background: linear-gradient(135deg, #3e2ecc, #201e7e);
+            color: #fff;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 12px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: 0.3s ease;
+            box-shadow: 0 4px 12px rgba(34, 33, 115, 0.3);
+        }
+
+        .manual:hover {
+            transform: translateY(-3px) scale(1.03);
+            box-shadow: 0 6px 18px rgba(33, 34, 115, 0.5);
+        }
+
+        .manual:active {
+            transform: scale(0.96);
+        }
+
+        .btn-group .pdf,
+        .btn-group .excel,
+        .btn-group .manual {
+            border: none;
+            /* 🔥 quita bordes */
+        }
+
+        .btn-group .pdf {
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+
+        .btn-group .excel {
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+        }
+
+        .btn-group .manual {
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+        }
+
+        /* <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< */
+        .btn-guardar {
+            background: linear-gradient(135deg, #4da3ff, #1f6feb);
+            /* 🔥 azul agradable */
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(31, 111, 235, 0.3);
+        }
+
+        .btn-guardar:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(31, 111, 235, 0.5);
+        }
+
+        .btn-guardar:active {
+            transform: scale(0.96);
+        }
+
+        .btn-guardarOtro {
+            background: linear-gradient(135deg, #00ccff, #0091b6);
+            /* 🔥 azul agradable */
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(16, 202, 248, 0.3);
+        }
+
+        .btn-guardarOtro:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(1, 218, 233, 0.5);
+        }
+
+        .btn-guardarOtro:active {
+            transform: scale(0.96);
+        }
+
+        .btn-editar {
+            background: linear-gradient(135deg, #29c230, #0ba118);
+            /* 🔥 azul agradable */
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(31, 235, 41, 0.3);
+        }
+
+        .btn-editar:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(38, 235, 31, 0.5);
+        }
+
+        .btn-editar:active {
+            transform: scale(0.96);
+        }
+
+        .btn-cancelar {
+            background: linear-gradient(135deg, #ff6b6b, #dc3545);
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+        }
+
+        .btn-cancelar:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(220, 53, 69, 0.5);
+        }
+
+        .btn-cancelar:active {
+            transform: scale(0.96);
+        }
+
+        .grupo-botones {
+            display: flex;
+            justify-content: flex-end;
+            /* 🔥 los manda a la derecha */
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .grupo-botones>* {
+            margin: 0;
+            border: none;
+            border-radius: 0;
+            display: flex;
+            align-items: center;
+        }
+
+        /* Bordes redondeados solo extremos */
+        .grupo-botones>*:first-child {
+            border-top-left-radius: 12px;
+            border-bottom-left-radius: 12px;
+        }
+
+        .grupo-botones>*:last-child {
+            border-top-right-radius: 12px;
+            border-bottom-right-radius: 12px;
+        }
+
+        /* <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< */

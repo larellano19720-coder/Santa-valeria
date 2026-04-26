@@ -1,0 +1,614 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}GANADERA{% endblock %}
+{% block body %}
+<!--**********************************
+            Content body start
+        ***********************************-->
+{% block head %}CATALOGO{% endblock %}
+<style>
+    .flip-card {
+        background-color: transparent;
+        width: 100%;
+        max-width: 300px;
+        height: 240px;
+        perspective: 1000px;
+        border: none;
+        border-radius: 16px;
+        position: relative;
+        /* necesario para posicionar el indicador */
+        overflow: hidden;
+    }
+
+    .flip-card-inner {
+        width: 100%;
+        transform-style: preserve-3d;
+        transition: transform 0.6s ease;
+        border-radius: 16px;
+    }
+
+    /* Clase que se agregará por JS al pasar por la esquina */
+    .flip-card.flipped .flip-card-inner {
+        transform: rotateY(180deg);
+    }
+
+    .flip-card-front,
+    .flip-card-back {
+        position: absolute;
+        width: 100%;
+        border-radius: 16px;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+        backface-visibility: hidden;
+        background-color: #f5f6fa;
+        padding: 10px 15px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .flip-card-front {
+        z-index: 2;
+    }
+
+    .flip-card-back {
+        transform: rotateY(180deg);
+        z-index: 1;
+    }
+
+    /* Indicador visual en la esquina */
+    .flip-corner-indicator {
+        position: absolute;
+        width: 40px;
+        height: 40px;
+        background: linear-gradient(135deg, #e0e0e0 50%, transparent 50%);
+        top: 0;
+        left: 0;
+        z-index: 5;
+        cursor: pointer;
+        border-top-left-radius: 16px;
+    }
+
+    .flip-corner-indicator.top-right {
+        left: auto;
+        right: 0;
+        background: linear-gradient(-135deg, #e0e0e0 50%, transparent 50%);
+        border-top-left-radius: 0;
+        border-top-right-radius: 16px;
+    }
+
+    /* Imagen de perfil */
+    .profile-img-container {
+        display: inline-block;
+        border-radius: 50%;
+        padding: 0px;
+        /* espacio para el borde */
+    }
+
+    .profile-img-container.logueado {
+        border: 3px solid rgba(76, 175, 80, 0.5);
+        /* verde claro semitransparente */
+    }
+
+    .profile-img-container.no-logueado {
+        border: 3px solid rgba(244, 67, 54, 0.5);
+        /* rojo claro semitransparente */
+    }
+
+    .profile-img {
+        border-radius: 50%;
+        display: block;
+        width: 80px;
+        /* ajusta tamaño como necesites */
+        height: 80px;
+        object-fit: cover;
+    }
+
+    /* Tipografía */
+    .role-label {
+        font-weight: bold;
+        color: #333;
+        font-size: 0.9rem;
+        margin-bottom: 5px;
+    }
+
+    .user-name {
+        font-size: 1rem;
+        font-weight: 600;
+        color: #333;
+        margin-top: 0;
+        margin-bottom: 3px;
+    }
+
+    .user-email {
+        font-size: 0.85rem;
+        color: #777;
+        margin: 0;
+    }
+
+    .label-title {
+        font-size: 0.7rem;
+        font-weight: 600;
+        color: #333;
+        margin: 4px 0 2px;
+        text-align: center;
+    }
+
+    .label-data {
+        font-size: 0.65rem;
+        color: #555;
+        margin-bottom: 4px;
+        text-align: center;
+    }
+
+    /* Botones */
+    .btn-action {
+        padding: 6px 12px;
+        font-size: 0.8rem;
+        border-radius: 8px;
+        text-decoration: none;
+        transition: background 0.3s ease;
+        border: none;
+        color: white;
+        margin: 5px 4px 0;
+        display: inline-block;
+        cursor: pointer;
+    }
+
+    .btn-action.edit {
+        background-color: #3a77ff;
+    }
+
+    .btn-action.edit:hover {
+        background-color: #295bcc;
+    }
+
+    .btn-action.add {
+        background-color: #28a745;
+    }
+
+    .btn-action.add:hover {
+        background-color: #218838;
+    }
+
+    .mi-boton {
+        all: unset;
+        cursor: pointer;
+        /* Estilos personalizados si los necesitas */
+        padding: 0;
+        border-radius: 8px;
+        background-color: #eee;
+        width: 100%;
+    }
+
+    .imagen-desvanecida {
+        opacity: 0.4;
+        /* Hace la imagen semi-transparente */
+        filter: grayscale(100%);
+        /* Opcional: la vuelve en escala de grises */
+        pointer-events: none;
+        /* Opcional: evita que se pueda clicar */
+    }
+
+    img {
+        width: 100%;
+        height: auto;
+        object-fit: contain;
+        max-height: 120px;
+        display: block;
+        margin: 0 auto;
+    }
+</style>
+{% include "Modal/index.html" %}
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row" style="padding-right: 0 !important;">
+            <!-- <div class="col-sm-12 col-xl-12 col-xxl-12" style="padding-right: 0 !important;" id="Inicio"> -->
+
+                <!-- <div class="row">
+
+                    <div class="col-xl col-xxl">
+                        <div class="card">
+                            <div class="card-header border-0 pb-0">
+                                <div>
+                                    <h4 class="card-title mb-2">Vehiculos</h4>
+
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                {% for t in datos_tolvas %}
+                                <div class="progress default-progress">
+                                    <div class="progress-bar bg-gradient-1 progress-animated"
+                                        style="width: {{ t.porcentaje|default_if_none:'0' }}%; height:20px;"
+                                        role="progressbar">
+                                        <span class="sr-only">{{ t.porcentaje }}% Complete</span>
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-end mt-2 pb-3 justify-content-between pb-4">
+                                    <span class="font-w600 text-black">{{ t.alias }}</span>
+                                    <span class="fs-18">
+                                        <span class="text-black pe-2">{{ t.cantidad }}</span>/
+                                        {{t.capacidad}}
+                                    </span>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+                <!-- <div class="row">
+                    <div class="col-sm-6 col-md-3 col-lg-3 col-xl-3 col-xxl-3">
+                        <div class="card cardcatalogo">
+                            <div class="card-header">
+                                <h4 class="card-title mb-2" style="text-align: center;">Corrales pendientes</h4>
+                            </div>
+                            <div class="card-body pb-2 cardcatalogob cardcatalogobImg">
+                                <div class="animacion mt-2">
+                                    <div class="loaderTime">
+                                        <span class="hour"></span>
+                                        <span class="min"></span>
+                                        <span class="circel"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <h4 class="mt-3" style="text-align: center;"><b>Registros: </b> <br> {{ pendientes }}
+                                </h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-3 col-lg-3 col-xl-3 col-xxl-3">
+                        <div class="card cardcatalogo">
+                            <div class="card-header">
+                                <h4 class="card-title mb-2" style="text-align: center;">Cargar tolva</h4>
+                            </div>
+                            <div class="card-body pb-2 cardcatalogob">
+                                <div class="animacion">
+                                    <div class="loaderTolva">
+                                        <div class="truckWrapper">
+                                            <div class="truckBody">
+                                                <svg fill="none" viewBox="0 0 198 93" class="trucksvg">
+                                                    <path stroke-width="3" stroke="#282828" fill="#ffffff"
+                                                        d="M135 22.5H177.264C178.295 22.5 179.22 23.133 179.594 24.0939L192.33 56.8443C192.442 57.1332 192.5 57.4404 192.5 57.7504V89C192.5 90.3807 191.381 91.5 190 91.5H135C133.619 91.5 132.5 90.3807 132.5 89V25C132.5 23.6193 133.619 22.5 135 22.5Z">
+                                                    </path>
+                                                    <path stroke-width="3" stroke="#282828" fill="#7D7C7C"
+                                                        d="M146 33.5H181.741C182.779 33.5 183.709 34.1415 184.078 35.112L190.538 52.112C191.16 53.748 189.951 55.5 188.201 55.5H146C144.619 55.5 143.5 54.3807 143.5 53V36C143.5 34.6193 144.619 33.5 146 33.5Z">
+                                                    </path>
+                                                    <path stroke-width="2" stroke="#282828" fill="#282828"
+                                                        d="M150 65C150 65.39 149.763 65.8656 149.127 66.2893C148.499 66.7083 147.573 67 146.5 67C145.427 67 144.501 66.7083 143.873 66.2893C143.237 65.8656 143 65.39 143 65C143 64.61 143.237 64.1344 143.873 63.7107C144.501 63.2917 145.427 63 146.5 63C147.573 63 148.499 63.2917 149.127 63.7107C149.763 64.1344 150 64.61 150 65Z">
+                                                    </path>
+                                                    <rect stroke-width="2" stroke="#282828" fill="#FFFCAB" rx="1"
+                                                        height="7" width="5" y="63" x="187"></rect>
+                                                    <rect stroke-width="2" stroke="#282828" fill="#282828" rx="1"
+                                                        height="11" width="4" y="81" x="193"></rect>
+                                                    <rect stroke-width="3" stroke="#282828" fill="#1f1f2e" rx="2.5"
+                                                        height="90" width="121" y="1.5" x="6.5"></rect>
+                                                    <rect stroke-width="2" stroke="#282828" fill="#DFDFDF" rx="2"
+                                                        height="4" width="6" y="84" x="1"></rect>
+                                                </svg>
+                                            </div>
+                                            <div class="truckTires">
+                                                <svg fill="none" viewBox="0 0 30 30" class="tiresvg">
+                                                    <circle stroke-width="3" stroke="#282828" fill="#282828" r="13.5"
+                                                        cy="15" cx="15"></circle>
+                                                    <circle fill="#DFDFDF" r="7" cy="15" cx="15"></circle>
+                                                </svg>
+                                                <svg fill="none" viewBox="0 0 30 30" class="tiresvg">
+                                                    <circle stroke-width="3" stroke="#282828" fill="#282828" r="13.5"
+                                                        cy="15" cx="15"></circle>
+                                                    <circle fill="#DFDFDF" r="7" cy="15" cx="15"></circle>
+                                                </svg>
+                                            </div>
+                                            <div class="road"></div>
+                                            <svg xml:space="preserve" viewBox="0 0 453.459 453.459"
+                                                xmlns:xlink="http://www.w3.org/1999/xlink"
+                                                xmlns="http://www.w3.org/2000/svg" id="Capa_1" version="1.1"
+                                                fill="#000000" class="lampPost">
+                                                <path d="M252.882,0c-37.781,0-68.686,29.953-70.245,67.358h-6.917v8.954c-26.109,2.163-45.463,10.011-45.463,19.366h9.993
+                                  c-1.65,5.146-2.507,10.54-2.507,16.017c0,28.956,23.558,52.514,52.514,52.514c28.956,0,52.514-23.558,52.514-52.514
+                                  c0-5.478-0.856-10.872-2.506-16.017h9.992c0-9.354-19.352-17.204-45.463-19.366v-8.954h-6.149C200.189,38.779,223.924,16,252.882,16
+                                  c29.952,0,54.32,24.368,54.32,54.32c0,28.774-11.078,37.009-25.105,47.437c-17.444,12.968-37.216,27.667-37.216,78.884v113.914
+                                  h-0.797c-5.068,0-9.174,4.108-9.174,9.177c0,2.844,1.293,5.383,3.321,7.066c-3.432,27.933-26.851,95.744-8.226,115.459v11.202h45.75
+                                  v-11.202c18.625-19.715-4.794-87.527-8.227-115.459c2.029-1.683,3.322-4.223,3.322-7.066c0-5.068-4.107-9.177-9.176-9.177h-0.795
+                                  V196.641c0-43.174,14.942-54.283,30.762-66.043c14.793-10.997,31.559-23.461,31.559-60.277C323.202,31.545,291.656,0,252.882,0z
+                                  M232.77,111.694c0,23.442-19.071,42.514-42.514,42.514c-23.442,0-42.514-19.072-42.514-42.514c0-5.531,1.078-10.957,3.141-16.017
+                                  h78.747C231.693,100.736,232.77,106.162,232.77,111.694z"></path>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <h4 class="mt-3" style="text-align: center;"><b>Registros: </b> <br> {{ tolva }}</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-3 col-lg-3 col-xl-3 col-xxl-3">
+                        <div class="card cardcatalogo">
+                            <div class="card-header">
+                                <h4 class="card-title mb-2" style="text-align: center;">Captura manual</h4>
+                            </div>
+                            <div class="card-body pb-2 cardcatalogob">
+                                <div class="animacion mt-2">
+                                    <div class="typewriter">
+                                        <div class="slide"><i></i></div>
+                                        <div class="paper"></div>
+                                        <div class="keyboard"></div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="card-footer">
+                                <h4 class="mt-3" style="text-align: center;"><b>Registros: </b> <br> {{ manuales }}</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-3 col-lg-3 col-xl-3 col-xxl-3">
+                        <div class="card cardcatalogo">
+                            <div class="card-header d-flex flex-wrap border-0 pb-0">
+                                <div class="me-auto mb-sm-0 mb-3">
+                                    <h4 class="card-title mb-2" style="text-align: center;">Corrales servidos</h4>
+
+                                </div>
+                            </div>
+                            <div class="card-body pb-2 cardcatalogob">
+                                <img src="{% static 'images/catalogos/servidos.png' %}">
+                            </div>
+                            <div class="card-footer">
+                                <h4 class="mt-3" style="text-align: center;"><b>Registros: </b> <br> {{ servidos }}</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+            <!-- </div> -->
+            <!-- <hr class="mt-3">
+            <hr>
+            <hr class="mb-5"> -->
+            <div class="col-sm-12 col-xl-12 col-xxl-12" style="padding-right: 0 !important;" id="Catalogo">
+                <div class="card">
+                    <div class="card-header d-block d-sm-flex border-0">
+                        <div style="display: flex; justify-content: center; align-items: center; ">
+                            <h2>CÁTALOGOS</h2>
+                        </div>
+                    </div>
+                    <!-- Button trigger modal -->
+
+
+
+                    <div class="card-body tab-content p-0">
+                        <div class="tab-pane active show fade" id="monthly" role="tabpanel">
+                            <div class="row px-4">
+
+
+                                <div class="col-sm-12 col-md-3 col-lg-3">
+
+                                    <a href="{% url 'catalogo:T_MateriaPrima' %}">
+
+                                        <div class="card cardcatalogo">
+                                            <div class="card-body">
+                                                <h5 class="card-title--medium">Materia Prima</h5>
+                                                <hr>
+                                                <img src="{% static 'images/catalogos/materias primas.png' %}"
+                                                    class="imagen-catalogo">
+                                                <p class="mt-3"><b>Registros: </b> {{ ContMateriaPrima }}</p>
+                                                <hr>
+                                            </div>
+                                        </div>
+
+                                    </a>
+
+                                </div>
+
+                                <div class="col-sm-12 col-md-3 col-lg-3">
+
+                                    <a href="{% url 'catalogo:T_Producto' %}">
+
+                                        <div class="card cardcatalogo">
+                                            <div class="card-body">
+                                                <h5 class="card-title--medium">Formula</h5>
+                                                <hr>
+                                                <img src="{% static 'images/catalogos/producto.png' %}"
+                                                    class="imagen-catalogo">
+                                                <p class="mt-3"><b>Registros: </b> {{ ContProductos }}</p>
+                                                <hr>
+                                            </div>
+                                        </div>
+
+                                    </a>
+
+                                </div>
+
+                                <div class="col-sm-12 col-md-3 col-lg-3">
+
+                                    <a href="{% url 'catalogo:T_Corral' %}">
+
+                                        <div class="card cardcatalogo">
+                                            <div class="card-body">
+                                                <h5 class="card-title--medium">Corrales</h5>
+                                                <hr>
+                                                <img src="{% static 'images/catalogos/corral.png' %}"
+                                                    class="imagen-catalogo">
+                                                <p class="mt-3"><b>Registros: </b> {{ ContCorrales }}</p>
+                                                <hr>
+                                            </div>
+                                        </div>
+
+                                    </a>
+
+                                </div>
+                                <div class="col-sm-12 col-md-3 col-lg-3">
+
+                                    <a href="{% url 'catalogo:T_Tolva' %}">
+
+                                        <div class="card cardcatalogo">
+                                            <div class="card-body">
+                                                <h5 class="card-title--medium">Destino</h5>
+                                                <hr>
+                                                <img src="{% static 'images/catalogos/tolva.png' %}"
+                                                    class="imagen-catalogo">
+                                                <p class="mt-3"><b>Registros: </b> {{ ContTolva }}</p>
+                                                <hr>
+                                            </div>
+                                        </div>
+
+                                    </a>
+
+                                </div>
+
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr class="mt-3">
+            <hr>
+            <hr class="mb-5">
+            <div class="col-sm-12 col-xl-12 col-xxl-12" style="padding-right: 0 !important;" id="Proceso">
+                <div class="card">
+                    <div class="card-header d-block d-sm-flex border-0">
+                        <div style="display: flex; justify-content: center; align-items: center; ">
+                            <h2>PROCESOS</h2>
+                        </div>
+                    </div>
+                    <div class="card-body tab-content p-0">
+                        <div class="tab-pane active show fade" id="monthly" role="tabpanel">
+                            <div class="row px-4">
+                                <!-- Servidos -->
+                                <div class="col-sm-12 col-md-3 col-lg-3">
+
+                                    <a href="{% url 'proceso:T_Solicitud_Servidos' %}">
+
+                                        <div class="card cardcatalogo">
+                                            <div class="card-body">
+                                                <h5 class="card-title--medium">Servidos</h5>
+                                                <hr>
+                                                <img src="{% static 'images/catalogos/servidos.png' %}">
+                                                <hr>
+                                            </div>
+                                        </div>
+
+                                    </a>
+
+                                </div>
+
+                                <!-- Vehículos (Tolva) -->
+                                <!-- <div class="col-sm-12 col-md-3 col-lg-3">
+                                    <a href="{% url 'proceso:T_Cargamento_Tolva' %}">
+                                        <div class="card cardcatalogo">
+                                            <div class="card-body">
+                                                <h5 class="card-title--medium">Destino</h5>
+                                                <hr>
+                                                <img src="{% static 'images/catalogos/tolva.png' %}">
+                                                <hr>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div> -->
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr class="mt-3">
+            <hr>
+            <hr class="mb-5">
+            <div class="col-sm-12 col-xl-12 col-xxl-12" style="padding-right: 0 !important;" id="Reporte">
+                <div class="card">
+                    <div class="card-header d-block d-sm-flex border-0">
+                        <div style="display: flex; justify-content: center; align-items: center; ">
+                            <h2>REPORTE</h2>
+                        </div>
+                    </div>
+                    <div class="card-body tab-content p-0">
+                        <div class="tab-pane active show fade" id="monthly" role="tabpanel">
+                            <div class="row px-4">
+                                <!-- Estatus -->
+                                <div class="col-sm-12 col-md-3 col-lg-3">
+
+                                    <a href="{% url 'reporte:T_Reporte' %}">
+
+                                        <div class="card cardcatalogo">
+                                            <div class="card-body cardcatalogob">
+                                                <h5 class="card-title--medium"><b style="color: transparent;">h
+                                                    </b>Movimiento<br>Servidos</h5>
+                                                <hr>
+                                                <img src="{% static 'images/catalogos/inventario.png' %}">
+                                                <hr>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr class="mt-3">
+            <hr>
+            <hr class="mb-5">
+            <div class="col-sm-12 col-xl-12 col-xxl-12" style="padding-right: 0 !important;" id="Subtabla">
+                <div class="card">
+                    <div class="card-header d-block d-sm-flex border-0">
+                        <div style="display: flex; justify-content: center; align-items: center; ">
+                            <h2>SUBTABLAS</h2>
+                        </div>
+                    </div>
+                    <div class="card-body tab-content p-0">
+                        <div class="tab-pane active show fade" id="monthly" role="tabpanel">
+                            <div class="row px-4">
+                                <!-- Estatus -->
+                                <div class="col-sm-12 col-md-3 col-lg-3">
+
+                                    <a href="{% url 'subtabla:T_Estatus' %}">
+
+                                        <div class="card cardcatalogo">
+                                            <div class="card-body cardcatalogob">
+                                                <h5 class="card-title--medium"><b style="color: transparent;">h
+                                                    </b><br> Estatus</h5>
+                                                <hr>
+                                                <img src="{% static 'images/catalogos/et.png' %}">
+                                                <hr>
+                                            </div>
+                                        </div>
+
+                                    </a>
+
+                                </div>
+
+                                <!-- Unidad Medida -->
+                                <div class="col-sm-12 col-md-3 col-lg-3">
+
+                                    <a href="{% url 'subtabla:T_Unidad_Medida' %}">
+
+                                        <div class="card cardcatalogo">
+                                            <div class="card-body">
+                                                <h5 class="card-title--medium">Unidad <br> Medida</h5>
+                                                <hr>
+                                                <img src="{% static 'images/catalogos/md1.png' %}">
+                                                <hr>
+                                            </div>
+                                        </div>
+
+                                    </a>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr class="mt-3">
+            <hr>
+            <hr class="mb-5">
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

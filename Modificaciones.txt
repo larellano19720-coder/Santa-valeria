@@ -1,0 +1,28 @@
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< 06/04/26 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+# Ahora se puede ver lo que esta en proceso o mas bien lo que se envio a la tolva
+# Se puede cancelar el corral individualmente
+# Se puede cancelar una orden que se encuentre en proceso (Faltaria agregar candados)
+# Se puede eliminar completamente una orden de servidos (una ves eliminada, no quedara registros de dicha orden, Faltaria agregar candados)
+# Se limito el numero de filas en el historial (Se mostraran solamente 5 registros)
+
+
+# Los reportes se pueden descargar en pdf y excel sin problemas, solamente es el de rango de fechas
+	* En el reporte de excel se entregan todos los datos sin filtros, mas que el rango de fechas
+
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< 08/04/26 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+# Se agrego la columma de cantidad animales por corral en la tabla repartidor
+	- Se agrego el campo a los templates de:
+		* El formulario
+		* Al editar
+		* Al agregar cuando se esta editando
+		* Al replicar
+		* Al mostrar el detalle de la orden
+
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< 09/04/26 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+# Se modifico el reporte de movimientos de servidos
+# Se filtra en base al rango de fechas
+	- Se agrego la columna:
+		* Cabezas por corral
+		* Total servidos
+		* Kilos por cabeza
+# Las modificaciones se agregaron a la exportacion en PDF y EXCEL

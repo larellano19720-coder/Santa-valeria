@@ -1,0 +1,450 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}CLIENTE{% endblock %}
+{% block body %}
+<!--**********************************
+            Content body start
+        ***********************************-->
+{% block head %}CATALOGO{% endblock %}
+<style>
+    .accion-grupo {
+        display: inline-flex;
+        border-radius: 8px;
+        overflow: hidden;
+        border: 1px solid #cfcfcf;
+    }
+
+    .accion-grupo form {
+        margin: 0;
+    }
+
+    .accion-btn {
+        width: 110px;
+        height: 38px;
+        color: #f3f3f3;
+        border: none;
+        background: #ff5100;
+        cursor: pointer;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: 0.2s;
+    }
+
+    .accion-btnc {
+        background: #ff3300;
+        color: #f3f3f3;
+    }
+
+    .accion-btne {
+        background: #ffa600;
+        color: #f3f3f3;
+    }
+
+    .accion-btn:hover {
+        background: #e9e9e9;
+    }
+
+    .accion-left {
+        border-right: 1px solid #cfcfcf;
+    }
+
+    .accion-center {
+        border-right: 1px solid #cfcfcf;
+        width: 90px;
+    }
+
+    .accion-right {
+        width: 110px;
+    }
+</style>
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row" style="padding-right: 0 !important;">
+            <div class="col-sm-12 col-xl-12 col-xxl-12" style="padding-right: 0 !important;">
+                <div class="card">
+
+                    <div class="card-header d-block d-sm-flex border-0">
+                        <h4 class="card-title mb-2">
+                            <a href="{% url 'proceso:T_Solicitud_Servidos'%}">
+                                <i class="bi bi-arrow-left-circle text-black fs-28"></i>
+                            </a>
+                            <b>EDITAR SOLICITUD SERVIDO ({{fecha}})</b>
+                        </h4>
+                        <div class="btn-group ml-4" role="group" aria-label="Basic example">
+
+
+                            <form action="{% url 'descargas:PDF_Orden_Servidos' %}" method="POST">
+                                {% csrf_token %}
+                                <input type="hidden" name="porcentaje" value="{{ Dato.porcentaje }}">
+                                <input type="hidden" name="fecha" value="{{ fecha|date:'Y-m-d H:i' }}">
+                                <button class="pdf" type="submit">
+                                    📄 Exportar PDF
+                                </button>
+                            </form>
+                            <form action="{% url 'proceso:T_Servidos_manuales' %}" method="POST">
+                                {% csrf_token %}
+                                <input type="hidden" name="porcentaje" value="{{ porcentaje }}">
+                                <input type="hidden" name="fecha" value="{{ fecha|date:'Y-m-d H:i' }}">
+                                <button class="manual" type="submit">
+                                    SERVIDOS MANUALES
+                                </button>
+                            </form>
+                        </div>
+
+
+                    </div>
+                    <hr>
+                    <div class="card-body tab-content px-4 pt-2">
+                        <form action="{% url 'proceso:A_Orden_Servidos' %}" method="POST" autocomplete="off"
+                            style="justify-content: flex-end;">
+                            <div class="tab-pane active show fade" id="monthly" role="tabpanel">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <div class="row" style="justify-content: flex-end;">
+                                        <div class="col-sm-12 col-md-12 col-lg-3 col-xl-3 mb-3">
+                                            <h6 class="h6-form">PORCENTAJE DESAYUNO *</h6>
+                                            <input type="number" name="porcentaje" class="form-control input"
+                                                value="{{porcentaje}}"
+                                                placeholder="Ingrese la cantidad solicitada (obligatorio)" required
+                                                step="0.01">
+
+                                            <input type="hidden" name="folio" value="{{ultimo_folio}}">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane active show fade mx-3" id="monthly" role="tabpanel">
+                                <div class="table-responsive">
+                                    <table class="table table-responsive-md card-table transactions-table" id="miTabla">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-black fs-16 font-w600 th-responsive" colspan="3">
+                                                    CORRAL
+                                                </th>
+                                                <th class="text-black fs-16 font-w600 th-responsive" colspan="3">
+                                                    FORMULA
+                                                </th>
+                                                <th class="text-black fs-16 font-w600 th-responsive" colspan="3">
+                                                    CANTIDAD SOLICITADA (KG)
+                                                </th>
+                                                <th class="text-black fs-16 font-w600 th-responsive" colspan="3">
+                                                    CANTIDAD ANIMALES
+                                                </th>                                                    
+                                                <th class="text-black fs-16 font-w600 th-responsive" colspan="3">
+                                                    ESTATUS
+                                                </th>
+                                                <th class="text-black fs-16 font-w600 th-responsive" colspan="3">
+                                                    CANCELAR CORRAL
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for Dato in TEServidos %}
+                                            <tr>
+                                                <td colspan="3">
+                                                    <span class="fs-16 text-black font-w400">
+                                                        {{Dato.IDCorral_id__Descripcion }}
+                                                    </span>
+                                                </td>
+                                                <td colspan="3">
+                                                    <span class="fs-16 text-black font-w400">
+                                                        <select class="select2 form-control col-12" name="producto[]">
+                                                            <option value="{{ Dato.IDProducto_id }}">
+                                                                ---{{ Dato.IDProducto_id__Descripcion }}---
+                                                            </option>
+                                                            {% for Producto in FEProducto %}
+
+                                                            <option value="{{ Producto.ID }}">
+                                                                {{ Producto.Descripcion }}
+                                                            </option>
+                                                            {% endfor %}
+
+                                                        </select>
+                                                    </span>
+                                                </td>
+                                                <td colspan="3">
+
+                                                    <input type="number" name="cantidadSol[]" class="form-control input"
+                                                        value="{{Dato.CantidadSolicitada}}">
+                                                    <input type="hidden" name="id[]" value="{{Dato.ID}}">
+
+                                                </td>
+                                                <td colspan="3">
+                                                    <input type="number" name="cantidadAnimales[]" class="form-control input"
+                                                        value="{{Dato.CantidadAnimales}}">
+                                                </td>                                                
+                                                <td colspan="3">
+                                                    <span class="fs-16 text-black font-w400">
+                                                        <select class="select2 form-control col-12" name="seSirve[]"
+                                                            required>
+                                                            <option value="{{Dato.SeSirve }}">
+                                                                ---{{Dato.SeSirve}}---
+                                                            </option>
+                                                            <option value="Si">Si</option>
+                                                            <option value="No">No </option>
+                                                        </select>
+                                                    </span>
+                                                </td>
+                                                <td colspan="3">
+                                                    <div class="accion-grupo">
+                                                        <button class="accion-btn accion-right btnCancelar  btn-sm"
+                                                            data-id="{{ Dato.ID }}" data-porcentaje="{{ porcentaje }}"
+                                                            data-estatus="{{ estatus }}"
+                                                            data-fecha="{{ Dato.FechaSol|date:'Y-m-d H:i' }}">
+                                                            Cancelar 🗑
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6">
+
+
+                                    {% if estatus == '3' or estatus == 3 %}
+                                    <button class="btn accion-btnc mr-5 eliminar  btn-sm" type="button"
+                                        data-fecha="{{ fecha|date:'Y-m-d H:i' }}">
+                                        ELIMINAR ORDEN 🗑
+                                    </button>
+                                    {% else %}
+                                    <button class="btn accion-btne mr-5 cancelar" type="button"
+                                        data-fecha="{{ fecha|date:'Y-m-d H:i' }}">
+                                        CANCELAR ORDEN
+                                    </button>
+                                    {% endif %}
+                                    <!-- </form> -->
+                                </div>
+                                <div class="col-6">
+
+                                    <div class="form-group grupo-botones">
+                                        <button type="submit" class="btn-editar" name="agregar" id="agregarBoton">
+                                            ✎ EDITAR
+                                        </button>
+                                        <a href="{% url 'proceso:T_Solicitud_Servidos' %}" class="btn-cancelar">
+                                            ❌ Cancelar
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <hr>
+                    <hr>
+
+
+                    <hr>
+                    <div class="card-header d-block d-sm-flex border-0">
+                        <h4 class="card-title mb-2">
+                            <a href="{% url 'proceso:T_Solicitud_Servidos'%}">
+                                <i class="bi bi-arrow-left-circle text-black fs-28"></i>
+                            </a>
+                            <b>AGREGAR SOLICITUD SERVIDO ({{fecha}})</b>
+                        </h4>
+                    </div>
+                    <div class="card-body tab-content px-4 pt-2">
+                        <form action="{% url 'proceso:AA_Orden_Servidos' %}" id="formServidos" method="POST"
+                            autocomplete="off" style="justify-content: flex-end;">
+                            <div class="tab-pane active show fade mx-3" id="monthly" role="tabpanel">
+                                <div class="table-responsive">
+                                    <table class="table table-responsive-md card-table transactions-table" id="miTabla">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-black fs-16 font-w600 th-responsive" colspan="3">
+                                                    CORRAL
+                                                </th>
+                                                <th class="text-black fs-16 font-w600 th-responsive" colspan="3">
+                                                    FORMULA
+                                                </th>
+                                                <th class="text-black fs-16 font-w600 th-responsive" colspan="3">
+                                                    CANTIDAD SOLICITADA (KG)
+                                                </th>
+                                                <th class="text-black fs-16 font-w600 th-responsive" colspan="3">
+                                                    CANTIDAD ANIMALES
+                                                </th>                                                    
+                                                <th class="text-black fs-16 font-w600 th-responsive" colspan="3">
+                                                    ESTATUS
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for Dato in corrales_faltantes %}
+                                            <tr>
+                                                <td colspan="3">
+                                                    <span class="fs-16 text-black font-w400">
+                                                        {{Dato.IDCorral_id__Descripcion}}
+                                                    </span>
+                                                </td>
+                                                <td colspan="3">
+                                                    <span class="fs-16 text-black font-w400">
+                                                        <select class="select2 form-control col-12" name="producto[]">
+                                                            <option value="">SELECCIONE FORMUALCIÓN</option>
+                                                            {% for Producto in FEProducto %}
+                                                            <option value="{{ Producto.ID }}">{{ Producto.Descripcion }}
+                                                            </option>
+                                                            {% endfor %}
+                                                        </select>
+                                                    </span>
+                                                </td>
+                                                <td colspan="3">
+                                                    <input type="number" name="cantidadSol[]" class="form-control input"
+                                                        value="0">
+                                                    <input type="hidden" name="id[]" value="{{Dato.IDCorral_id}}">
+                                                    <input type="hidden" name="fecha"
+                                                        value="{{ fecha|date:'Y-m-d H:i' }}">
+                                                    <input type="hidden" name="estatus" value="{{estatus}}">
+                                                    <input type="hidden" name="porcentaje" value="{{porcentaje}}">
+                                                </td>
+                                                <td colspan="3">
+                                                    <input type="number" name="cantidadAnimales[]" class="form-control input"
+                                                        value="0">
+                                                </td>                                                
+                                                <td colspan="3">
+                                                    <span class="fs-16 text-black font-w400">
+                                                        <select class="select2 form-control col-12" name="seSirve[]"
+                                                            required>
+                                                            <option value="Si">Si</option>
+                                                            <option value="No">No</option>
+                                                        </select>
+                                                    </span>
+                                                </td>
+
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="form-group grupo-botones">
+                                <button type="submit" class="btn-guardar" id="agregarBoton">
+                                    💾 Confirmar
+                                </button>
+                                <a href="{% url 'proceso:T_Solicitud_Servidos' %}" class="btn-cancelar">
+                                    ❌ Cancelar
+                                </a>
+                            </div>     
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    document.querySelectorAll(".btnCancelar").forEach(btn => {
+
+        btn.addEventListener("click", function () {
+
+            let id = this.dataset.id
+            let porcentaje = this.dataset.porcentaje
+            let estatus = this.dataset.estatus
+            let fecha = this.dataset.fecha
+
+            fetch("{% url 'proceso:C_Corral_Servidos' %}", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                    "X-CSRFToken": "{{ csrf_token }}"
+                },
+                body: `id=${id}&porcentaje=${porcentaje}&estatus=${estatus}&fecha=${fecha}`
+            })
+                .then(response => response.json())
+                .then(data => {
+
+                    // 🔥 OPCIÓN 1: recargar
+                    location.reload()
+
+                    // 🔥 OPCIÓN 2 (mejor UX):
+                    // this.closest("tr").remove()
+
+                    // 🔥 OPCIÓN 3:
+                    // window.location.href = data.redirect_url
+                })
+        })
+    })
+</script>
+<script>
+    document.getElementById("formServidos").addEventListener("submit", function (e) {
+        e.preventDefault(); // 🔴 evita recargar la página
+
+        let form = this;
+        let formData = new FormData(form);
+
+        fetch(form.action, {
+            method: "POST",
+            body: formData,
+            headers: {
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'ok') {
+                    alert(data.message);
+
+                    // opcional: limpiar formulario
+                    form.reset();
+
+                    // opcional: recargar tabla o sección
+                    location.reload();
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+            });
+    });
+</script>
+<script>
+    document.querySelectorAll(".eliminar").forEach(btn => {
+
+        btn.addEventListener("click", function () {
+
+            let fecha = this.dataset.fecha;
+
+            fetch("{% url 'proceso:EM_Orden_Servidos' %}", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                    "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value
+                },
+                body: "fecha=" + fecha
+            })
+                .then(response => response.json())
+                .then(data => {
+                    window.location.href = data.redirect_url;
+                });
+
+        });
+
+    });
+</script>
+<script>
+    document.querySelectorAll(".cancelar").forEach(btn => {
+
+        btn.addEventListener("click", function () {
+
+            let fecha = this.dataset.fecha;
+
+            fetch("{% url 'proceso:C_Orden_Servidos' %}", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                    "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value
+                },
+                body: "fecha=" + fecha
+            })
+                .then(response => response.json())
+                .then(data => {
+                    window.location.href = data.redirect_url;
+                });
+
+        });
+
+    });
+</script>
+{% endblock %}

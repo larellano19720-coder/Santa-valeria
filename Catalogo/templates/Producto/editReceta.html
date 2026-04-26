@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}CLIENTE{% endblock %}
+{% block body %}
+<!--**********************************
+            Content body start
+        ***********************************-->
+{% block head %}CATALOGO{% endblock %}
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row" style="padding-right: 0 !important;">
+            <div class="col-sm-12 col-xl-12 col-xxl-12" style="padding-right: 0 !important;">
+                <div class="card">
+                    <div class="card-header d-block d-sm-flex border-0">
+                        <div class="me-3">
+                            <h4 class="card-title mb-2">
+                                <a href="{% url 'catalogo:T_Producto'%}">
+                                    <i class="bi bi-arrow-left-circle text-black fs-28"></i>
+                                </a>
+                                <b>EDITAR RECETA #{{TRecetas.Clave}}</b>
+                            </h4>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="card-body tab-content px-4 pt-2">
+                        <div class="tab-pane active show fade" id="monthly" role="tabpanel">
+                            <form action="{% url 'catalogo:A_Recetas'%}" method="POST" autocomplete="off">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <input type="hidden" name="id" value="{{TRecetas.ID}}">
+                                    <input type="hidden" name="folio" value="{{TRecetas.Folio}}">
+                                    <input type="hidden" name="producto" value="{{TRecetas.IDProductos_id}}">
+                                    <input type="hidden" class="form-control" name="tecnico"
+                                        value="{{ user.first_name }} {{user.last_name}}">
+                                    <div class="row mr-1 ml-1 fila">
+                                        <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4 mb-3">
+                                            <h6 class="h6-form">MATERIA PRIMA <label>*</label></h6>
+                                            <select class="select2 form-control col-12" name="materia" required>
+                                                <option value="{{FiltradoMateriaPrima.ID}}">
+                                                    --------{{FiltradoMateriaPrima.Descripcion}}--------
+                                                </option>
+                                                {% for MateriaPrima in FEMateriaPrima %}
+                                                <option value="{{ MateriaPrima.ID }}">{{ MateriaPrima.Descripcion }}
+                                                </option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4 mb-3">
+                                            <h6 class="h6-form">PROPORCIÓN <label>*</label></h6>
+                                            <input type="tel" name="proporcion" value="{{TRecetas.Porcentaje}}"
+                                                class="form-control" placeholder="Ingrese la cantidad" required
+                                                id="proporcion" data-total="{{ total }}">
+                                            <p id="error-message" style="color: red; display: none;">La suma de las
+                                                proporciones no debe exceder 100.</p>
+                                        </div>
+                                        <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4 mb-3">
+                                            <h6 class="h6-form">MERMA <label>*</label></h6>
+                                            <input type="tel" name="merma" value="{{TRecetas.Merma}}"
+                                                class="form-control" placeholder="Ingrese la cantidad" required>
+                                        </div>
+                                    </div>
+                                    <div class="form-group grupo-botones">
+                                        <button type="submit" class="btn-editar" name="agregar" id="agregarBoton">
+                                            ✎ Actualizar
+                                        </button>
+                                        <a href="{% url 'catalogo:AR_Producto' ID=TRecetas.IDProductos_id %}" class="btn-cancelar">
+                                            ❌ Cancelar
+                                        </a>
+                                    </div>                                    
+                                    
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const proporcionInput = document.getElementById("proporcion");
+        const submitBtn = document.getElementById("submit-btn");
+        const errorMessage = document.getElementById("error-message");
+        const total = parseFloat(proporcionInput.getAttribute('data-total')) || 0;
+
+        proporcionInput.addEventListener("input", function () {
+            const proporcionValue = parseFloat(proporcionInput.value) || 0;
+            if (total + proporcionValue > 100) {
+                errorMessage.style.display = "block";
+                submitBtn.disabled = true;
+            } else {
+                errorMessage.style.display = "none";
+                submitBtn.disabled = false;
+            }
+        });
+    });
+</script>
+{% endblock %}

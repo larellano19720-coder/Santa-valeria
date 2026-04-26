@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}CLIENTE{% endblock %}
+{% block body %}
+<!--**********************************
+            Content body start
+        ***********************************-->
+{% block head %}CATALOGO{% endblock %}
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row" style="padding-right: 0 !important;">
+            <div class="col-sm-12 col-xl-12 col-xxl-12" style="padding-right: 0 !important;">
+                <div class="card">
+                    <div class="card-header d-block  border-0">
+                        <div class="row">
+                            <div class="col-8">
+                                <h4 class="card-title mb-1 d-flex align-items-center">
+                                    <a href="{% url 'aplicacion:Menu_Presentacion' %}#Catalogo" class="me-2">
+                                        <i class="bi bi-arrow-left-circle text-black fs-28"></i>
+                                    </a>
+                                    <b>TABLA OPERADOR</b>
+                                </h4>
+                               
+                            </div>
+
+                            <!-- BOTÓN -->
+                            <div class="col-4 d-flex justify-content-md-end justify-content-start mt-3 mt-md-0">
+                                <a href="{% url 'catalogo:F_Operador' %}">
+                                    <button class="c-button">
+                                        <span class="c-main">
+                                            <span class="c-ico"><span class="c-blur"></span> <span class="ico-text">+</span></span>
+                                            Agregar
+                                        </span>
+                                    </button>
+                                </a>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="card-body tab-content p-0">
+                        <div class="tab-pane active show fade" id="monthly" role="tabpanel">
+                            <div class="table-responsive">
+                                <table class="table table-responsive-md card-table transactions-table" id="miTabla">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-black fs-16 font-w600 th-responsive">
+                                                FOLIO
+                                            </th>
+                                            <th class="text-black fs-16 font-w600 th-responsive">
+                                                DESCRIPCIÓN
+                                            </th>
+                                            <th class="text-black fs-16 font-w600 th-responsive">
+                                                ESTATUS
+                                            </th>
+                                            {% if perms.Aplicacion.change_tbloperadores or perms.Aplicacion.delete_tbloperadores %}
+                                            <th class="text-black fs-16 font-w600 th-responsive">
+                                                ACCIÓN
+                                            </th>
+                                            {% endif %}
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for Dato in TOperadores %}
+                                        <tr>
+                                            <td>
+                                                <span class="fs-16 text-black font-w400">
+                                                    {{Dato.Clave}}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <span class="fs-16 text-black font-w400">
+                                                    {{Dato.Descripcion}}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <span class="fs-16 text-black font-w400">
+                                                    {{Dato.IDEstatus_id__Descripcion}}
+                                                </span>
+                                            </td>
+                                            {% if perms.Aplicacion.change_tbloperadores or perms.Aplicacion.delete_tbloperadores %}
+                                            <td>
+                                                {% if perms.Aplicacion.change_tbloperadores %}
+                                                <a style="display: inline-block;" href="Editar/{{Dato.ID}}">
+                                                    <button class="edit-button">
+                                                        <svg class="edit-svgIcon" viewBox="0 0 512 512">
+                                                            <path
+                                                                d="M410.3 231l11.3-11.3-33.9-33.9-62.1-62.1L291.7 89.8l-11.3 11.3-22.6 22.6L58.6 322.9c-10.4 10.4-18 23.3-22.2 37.4L1 480.7c-2.5 8.4-.2 17.5 6.1 23.7s15.3 8.5 23.7 6.1l120.3-35.4c14.1-4.2 27-11.8 37.4-22.2L387.7 253.7 410.3 231zM160 399.4l-9.1 22.7c-4 3.1-8.5 5.4-13.3 6.9L59.4 452l23-78.1c1.4-4.9 3.8-9.4 6.9-13.3l22.7-9.1v32c0 8.8 7.2 16 16 16h32zM362.7 18.7L348.3 33.2 325.7 55.8 314.3 67.1l33.9 33.9 62.1 62.1 33.9 33.9 11.3-11.3 22.6-22.6 14.5-14.5c25-25 25-65.5 0-90.5L453.3 18.7c-25-25-65.5-25-90.5 0zm-47.4 168l-144 144c-6.2 6.2-16.4 6.2-22.6 0s-6.2-16.4 0-22.6l144-144c6.2-6.2 16.4-6.2 22.6 0s6.2 16.4 0 22.6z">
+                                                            </path>
+                                                        </svg>
+                                                    </button>
+                                                </a>
+                                                {% endif %}
+                                            </td>
+                                            {% endif %}
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

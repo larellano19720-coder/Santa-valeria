@@ -1,0 +1,68 @@
+{% load static %}
+<!-- Modal -->
+<div class="modal fade" id="sinPermisos" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">No autorizado</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" style="justify-content: center; align-items: center; text-align: center;">
+                <h4>LO SENTIMOS, NO CUENTAS CON LOS PERMISOS NECESARIOS PARA INGRESAR A ESTE APARTADO</h4>
+                <img src="{% static 'images/catalogos/sinAcceso.jpg' %}" width="50%">
+            </div>
+            <!-- <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">CERRAR</button>
+            </div> -->
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalFichaTecnica" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content shadow-lg">
+            <div class="modal-header  text-black">
+                <h5 class="modal-title" id="modalLabel"><i class="fa fa-cogs me-2"></i>BASE DE DATOS
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                    aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                {% for Configuracion in TConfiguracion %}
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <strong>Usuario:</strong>
+                        <div class="border p-2 rounded">{{ Configuracion.Usuario }}</div>
+                    </div>
+                    <div class="col-md-6">
+                        <strong>Ultimo movimiento:</strong>
+                        <div class="border p-2 rounded">{{ Configuracion.BaseDeDatos }}</div>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <strong>Fecha de Descarga:</strong>
+                        <div class="border p-2 rounded">{{ Configuracion.FechaDescarga }}</div>
+                    </div>
+                    <div class="col-md-6">
+                        <strong>Fecha de Actualización:</strong>
+                        <div class="border p-2 rounded">{{ Configuracion.FechaActualizacion }}</div>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-center gap-3 mt-4">
+                    <a href="{% url 'aplicacion:Copia' %}" class="btn btn-outline-secondary">
+                        <i class="fa fa-copy me-1"></i> Actualizar Copia
+                    </a>
+                    <a href="{% url 'aplicacion:Descargar-SQLite3' %}" class="btn btn-outline-success">
+                        <i class="fa fa-download me-1"></i> Descargar
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>

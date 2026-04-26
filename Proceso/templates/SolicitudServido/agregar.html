@@ -1,0 +1,197 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}CLIENTE{% endblock %}
+{% block body %}
+<!--**********************************
+            Content body start
+        ***********************************-->
+{% block head %}CATALOGO{% endblock %}
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row" style="padding-right: 0 !important;">
+            <div class="col-sm-12 col-xl-12 col-xxl-12" style="padding-right: 0 !important;">
+                <div class="card">
+
+                    <div class="card-header d-block d-sm-flex border-0">
+                        <h4 class="card-title mb-2">
+                            <a href="{% url 'proceso:T_Solicitud_Servidos'%}">
+                                <i class="bi bi-arrow-left-circle text-black fs-28"></i>
+                            </a>
+                            <b>EDITAR SOLICITUD SERVIDO ({{fecha}})</b>
+                        </h4>
+
+                        <form action="{% url 'proceso:T_Servidos_manuales' %}" method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" name="porcentaje" value="{{ Dato.porcentaje }}">
+                            <input type="hidden" name="fecha" value="{{ fecha|date:'Y-m-d H:i' }}">
+                            <button class="btn btn-primary" type="submit">
+                                SERVIDOS MANUALES
+                            </button>
+                        </form>
+                    </div>
+                    <hr>
+                    <div class="card-body tab-content px-4 pt-2">
+                        <form action="{% url 'proceso:A_Orden_Servidos' %}" method="POST" autocomplete="off"
+                            style="justify-content: flex-end;">
+                            <div class="tab-pane active show fade" id="monthly" role="tabpanel">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <div class="row" style="justify-content: flex-end;">
+                                        <div class="col-sm-12 col-md-12 col-lg-3 col-xl-3 mb-3">
+                                            <h6 class="h6-form">PORCENTAJE DESAYUNO *</h6>
+                                            <input type="number" name="porcentaje" class="form-control input"
+                                                value="{{porcentaje}}"
+                                                placeholder="Ingrese la cantidad solicitada (obligatorio)" required
+                                                step="0.01">
+
+                                            <input type="hidden" name="folio" value="{{ultimo_folio}}">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane active show fade mx-3" id="monthly" role="tabpanel">
+                                <div class="table-responsive">
+                                    <table class="table table-responsive-md card-table transactions-table" id="miTabla">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-black fs-16 font-w600 th-responsive" colspan="3">
+                                                    CORRAL
+                                                </th>
+                                                <th class="text-black fs-16 font-w600 th-responsive" colspan="3">
+                                                    FORMULA
+                                                </th>
+                                                <th class="text-black fs-16 font-w600 th-responsive" colspan="3">
+                                                    CANTIDAD SOLICITADA (KG)
+                                                </th>
+                                                <th class="text-black fs-16 font-w600 th-responsive" colspan="3">
+                                                    ESTATUS
+                                                </th>
+                                                <!-- <th class="text-black fs-16 font-w600 th-responsive" colspan="3">
+                                                    DUPLICAR
+                                                </th> -->
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for Dato in TEServidos %} <tr>
+                                                <td colspan="3">
+                                                    <span class="fs-16 text-black font-w400">
+                                                        {{Dato.IDCorral_id__Descripcion}}
+                                                    </span>
+                                                </td>
+                                                <td colspan="3">
+                                                    <span class="fs-16 text-black font-w400">
+                                                        <select class="select2 form-control col-12" name="producto[]">
+                                                            {% if Dato.IDProducto_id %}
+                                                            <option value="{{ Dato.IDProducto_id }}">
+                                                                ---{{ Dato.IDProducto_id__Descripcion }}---
+                                                            </option>
+                                                            {% else %}
+                                                            <option value="">
+                                                                --- Seleccione el producto ---
+                                                            </option>
+                                                            {% endif %}
+                                                            {% for Producto in FEProducto %}
+
+                                                            <option value="{{ Producto.ID }}">
+                                                                {{ Producto.Descripcion }}
+                                                            </option>
+                                                            {% endfor %}
+
+                                                        </select>
+                                                    </span>
+                                                </td>
+                                                <td colspan="3">
+                                                    {% if Dato.CantidadSolicitada %}
+                                                    <input type="number" name="cantidadSol[]" class="form-control input"
+                                                        value="{{Dato.CantidadSolicitada}}">
+                                                    <input type="hidden" name="id[]" value="{{Dato.ID}}">
+                                                    {% else %}
+                                                    <input type="number" name="cantidadSol[]" class="form-control input"
+                                                        value="0">
+                                                    <input type="hidden" name="id[]" value="">
+                                                    <input type="hidden" name="corral[]" value="{{Dato.IDCorral_id}}">
+                                                    <input type="hidden" name="fecha"
+                                                        value="{{ fecha|date:'Y-m-d H:i' }}">
+                                                    <input type="hidden" name="porcentaje" value="{{porcentaje}}">
+                                                    <input type="hidden" value="{{estatus}}" name="estatus">
+                                                    {% endif %}
+                                                </td>
+                                                <td colspan="3">
+                                                    <span class="fs-16 text-black font-w400">
+                                                        <select class="select2 form-control col-12" name="seSirve[]"
+                                                            required>
+                                                            {% if Dato.CantidadSolicitada %}
+                                                            <option value="{{Dato.SeSirve }}">
+                                                                ---{{Dato.SeSirve}}---
+                                                            </option>
+
+                                                            {% endif %}
+                                                            <option value="Si">Si</option>
+                                                            <option value="No">No </option>
+                                                        </select>
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <!-- <div class="form-group grupo-botones">
+                                <button type="submit" class="btn-guardar" id="agregarBoton">
+                                    💾 Confirmar
+                                </button>
+                                <a href="{% url 'proceso:T_Solicitud_Servidos' %}" class="btn-cancelar">
+                                    ❌ Cancelar
+                                </a>
+                            </div> -->
+                            <div class="form-group" style="display:flex; justify-content:flex-end;">
+
+                                <button type="submit" class="btn btn-success agregarBoton mr-5" name="agregar"
+                                    id="agregarBoton">
+                                    EDITAR
+                                </button>
+
+                                <a href="{% url 'proceso:T_Solicitud_Servidos' %}">
+                                    <button type="button" class="btn btn-danger cancelarBoton ml-5">Cancelar</button>
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- <script> function duplicarFila(btn) {
+        let fila = btn.closest("tr"); // 🟢 Clonar SIN tocar la original 
+        let nuevaFila = fila.cloneNode(true); // 🔴 Limpiar inputs 
+        nuevaFila.querySelectorAll("input[type='number']").forEach(input => { input.value = 0; }); // 🔴 Limpiar selects 
+        nuevaFila.querySelectorAll("select").forEach(select => {
+            select.selectedIndex = 0; // 🔴 Eliminar basura de select2 si se clonó 
+            select.classList.remove("select2-hidden-accessible"); select.removeAttribute("data-select2-id");
+        }); // 🔴 Eliminar contenedores select2 clonados 
+        $(nuevaFila).find("span.select2").remove(); // Insertar fila nueva 
+        fila.parentNode.insertBefore(nuevaFila, fila.nextSibling); // 🔵 Inicializar select2 SOLO en la nueva fila 
+        $(nuevaFila).find('.select2').select2();
+    } 
+</script>
+<script>
+    function eliminarFila(btn) {
+        try {
+            let fila = btn.closest("tr");
+            let tbody = fila.parentNode;
+
+            if (tbody.querySelectorAll("tr").length <= 1) {
+                alert("Debe existir al menos una fila");
+                return;
+            }
+
+            fila.remove();
+
+        } catch (error) {
+            console.error("Error al eliminar fila:", error);
+        }
+    }
+</script> -->
+{% endblock %}

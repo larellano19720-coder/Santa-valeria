@@ -1,0 +1,222 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}CLIENTE{% endblock %}
+{% block body %}
+<!--**********************************
+            Content body start
+        ***********************************-->
+{% block head %}CATALOGO{% endblock %}
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row" style="padding-right: 0 !important;">
+            <div class="col-sm-12 col-xl-12 col-xxl-12" style="padding-right: 0 !important;">
+                <div class="card">
+                    <div class="card-header d-block d-sm-flex border-0">
+                        <div class="me-3">
+                            <h4 class="card-title mb-2">
+                                <a href="{% url 'catalogo:T_Producto'%}">
+                                    <i class="bi bi-arrow-left-circle text-black fs-28"></i>
+                                </a>
+                                <b>FORMULARIO PRODUCTOS</b>
+                            </h4>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="card-body tab-content px-4 pt-2">
+                        <div class="tab-pane active show fade" id="monthly" role="tabpanel">
+                            <div class="row fila">
+                                <div class="col-sm-12 col-md-12 col-lg-12 pt-3">
+                                    <form action="{% url 'catalogo:G_Receta'%}" method="POST" autocomplete="off">
+                                        {% csrf_token %}
+                                        <input type="hidden" class="form-control" name="clave" value="{{AgRecetas.ID}}">
+
+                                        <div class="row mr-1 ml-1 fila">
+                                            <div class="col-sm-12 col-md-12 col-lg-3 col-xl-3 mb-3">
+                                                <h4 class="h6-form" style="text-align: center;">PRODUCTO</h4>
+                                                <h6 class="h6-form" style="font-weight: lighter; text-align: center;">{{AgRecetas.Descripcion}}</h6>
+                                                <input type="tel" class="form-control" name="descripcion"
+                                                    value="{{AgRecetas.Descripcion}}" readonly style="display: none;">
+                                            </div>
+                                            <div class="col-sm-12 col-md-12 col-lg-3 col-xl-3 mb-3">
+                                                <h4 class="h6-form" style="text-align: center;">PRECIO UNITARIO</h4>
+                                                <h6 class="h6-form" style="font-weight: lighter; text-align: center;">{{AgRecetas.PrecioUnitario}}</h6>
+                                                <input type="text" class="form-control col-12" name="precio"
+                                                    value="{{AgRecetas.PrecioUnitario}}" readonly
+                                                    style="display: none;">
+                                            </div>
+
+                                            <div class="col-sm-12 col-md-12 col-lg-2 col-xl-2 mb-3">
+                                                <h4 class="h6-form" style="text-align: center;">ESTATUS</h4>
+                                                <h6 class="h6-form" style="font-weight: lighter; text-align: center;">{{ FiltradoEstatus.Descripcion }}</h6>
+                                                <div style="display: none;">
+                                                    <select class="select2 form-control col-12" name="estatus" required>
+                                                        <option value="{{ FiltradoEstatus.ID }}">
+                                                            {{ FiltradoEstatus.Descripcion }}</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-12 col-md-12 col-lg-2 col-xl-2 mb-3">
+                                                <h4 class="h6-form" style="text-align: center;">UNIDAD MEDIDA</h4>
+                                                <h6 class="h6-form" style="font-weight: lighter; text-align: center;">{{ FiltradoUnidad.Descripcion }}</h6>
+                                                <div style="display: none;">
+                                                    <select class="select2 form-control col-12" name="unidad" required>
+                                                        <option value="{{ FiltradoUnidad.ID }}">
+                                                            {{ FiltradoUnidad.Descripcion }}
+                                                        </option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-12 col-md-12 col-lg-2 col-xl-2 mb-3">
+                                                <h4 class="h6-form" style="text-align: center;">SE SIRVE</h4>
+                                                <h6 class="h6-form" style="font-weight: lighter; text-align: center;">{{ AgRecetas.SeSirve }}</h6>
+                                                <div style="display: none;">
+                                                    <select class="select2 form-control col-12" name="seSirve" required>
+                                                        <option value="{{ AgRecetas.SeSirve }}">{{ AgRecetas.SeSirve }}
+                                                        </option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                </div>
+                                <hr>
+                                <hr>
+                                <hr>
+
+                                <div class="col-sm-12 col-md-12 col-lg-12 pt-3"
+                                    style="border: 1px rgb(124, 124, 124) solid;">
+                                    <div class="row mr-1 ml-1 pt-3 fila">
+                                        <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4 mb-3">
+                                            <h6 class="h6-form">MATERIA PRIMA <label>*</label></h6>
+                                            <select class="select2 form-control" name="materia" required>
+                                                {% for MateriaPrima in FMateriaPrima %}
+                                                <option value="{{ MateriaPrima.ID }}">{{ MateriaPrima.Descripcion }}
+                                                </option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4 mb-3">
+                                            <h6 class="h6-form">PROPORCIÓN <label>*</label></h6>
+                                            <input type="text" id="proporcion" name="proporcion" class="form-control"
+                                                placeholder="Ingrese la proporción" required data-total="{{ total }}">
+                                            <p id="error-message" style="color: red; display: none;">La suma de las
+                                                proporciones no debe exceder 100.</p>
+                                        </div>
+                                        <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4 mb-3">
+                                            <h6 class="h6-form">MERMA <label>*</label></h6>
+                                            <input type="text" name="merma" value="2.0" class="form-control"
+                                                placeholder="Ingrese la merma" required>
+                                        </div>
+                                    </div>
+                                    <div class="form-group grupo-botones">
+                                        <button type="submit" class="btn-guardar" name="agregar">💾 Guardar y
+                                            agregar otro</button>
+                                        <button type="submit" class="btn-guardarOtro" name="salir">💾 Guardar y
+                                            salir</button>
+                                        <a href="{% url 'catalogo:T_Producto' %}" class="btn-cancelar">
+                                            ❌ Cancelar
+                                        </a>
+
+                                    </div>                                    
+                                  
+                                    </form>
+
+                                    {% if messages %}
+                                    {% for message in messages %}
+                                    <br>
+                                    <div
+                                        class="alert {% if 'error' in message.tags %}alert-danger{% else %}alert-primary{% endif %} notifications">
+                                        {{ message }}
+                                    </div>
+                                    {% endfor %}
+                                    {% endif %}
+                                    <br>
+                                    <div class="tab-pane active show fade" id="monthly" role="tabpanel">
+                                        <div class="table-responsive">
+                                            <table class="table table-responsive-md card-table transactions-table"
+                                                id="miTabla">
+                                                <thead>
+                                                    <tr>
+                                                        <th class="text-black fs-16 font-w600 th-responsive">
+                                                            ID
+                                                        </th>
+                                                        <th class="text-black fs-16 font-w600 th-responsive">
+                                                            MATERIA PRIMA
+                                                        </th>
+                                                        <th class="text-black fs-16 font-w600 th-responsive">
+                                                            PROPORCIÓN
+                                                        </th>
+                                                        <th class="text-black fs-16 font-w600 th-responsive">
+                                                            MERMA
+                                                        </th>
+                                                        <th class="text-black fs-16 font-w600 th-responsive">
+                                                            ACCIONES
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {% for recetas in Recetas %}
+                                                    <tr>
+                                                        <th scope="row" style="border-bottom: 1px white solid;">
+                                                            {{ recetas.Folio }}
+                                                        </th>
+                                                        <td>
+                                                            {{ recetas.IDMateriaPrima_id__Descripcion }}
+                                                        </td>
+                                                        <td>
+                                                            {{ recetas.Porcentaje }}
+                                                        </td>
+                                                        <td>
+                                                            {{ recetas.Merma }}
+                                                        </td>
+                                                        <td>
+                                                            <a style="display: inline-block;"
+                                                                href="Editar/{{recetas.ID}}" role="button">
+                                                                <button class="edit-button">
+                                                                    <svg class="edit-svgIcon" viewBox="0 0 512 512">
+                                                                        <path
+                                                                            d="M410.3 231l11.3-11.3-33.9-33.9-62.1-62.1L291.7 89.8l-11.3 11.3-22.6 22.6L58.6 322.9c-10.4 10.4-18 23.3-22.2 37.4L1 480.7c-2.5 8.4-.2 17.5 6.1 23.7s15.3 8.5 23.7 6.1l120.3-35.4c14.1-4.2 27-11.8 37.4-22.2L387.7 253.7 410.3 231zM160 399.4l-9.1 22.7c-4 3.1-8.5 5.4-13.3 6.9L59.4 452l23-78.1c1.4-4.9 3.8-9.4 6.9-13.3l22.7-9.1v32c0 8.8 7.2 16 16 16h32zM362.7 18.7L348.3 33.2 325.7 55.8 314.3 67.1l33.9 33.9 62.1 62.1 33.9 33.9 11.3-11.3 22.6-22.6 14.5-14.5c25-25 25-65.5 0-90.5L453.3 18.7c-25-25-65.5-25-90.5 0zm-47.4 168l-144 144c-6.2 6.2-16.4 6.2-22.6 0s-6.2-16.4 0-22.6l144-144c6.2-6.2 16.4-6.2 22.6 0s6.2 16.4 0 22.6z">
+                                                                        </path>
+                                                                    </svg>
+                                                                </button>
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                    {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const proporcionInput = document.getElementById("proporcion");
+        const submitBtn = document.getElementById("submit-btn");
+        const submitBtn2 = document.getElementById("submit-btn2");
+        const errorMessage = document.getElementById("error-message");
+        const total = parseFloat(proporcionInput.getAttribute('data-total')) || 0;
+
+        proporcionInput.addEventListener("input", function () {
+            const proporcionValue = parseFloat(proporcionInput.value) || 0;
+            if (total + proporcionValue > 100) {
+                errorMessage.style.display = "block";
+                submitBtn.disabled = true;
+                submitBtn2.disabled = true;
+            } else {
+                errorMessage.style.display = "none";
+                submitBtn.disabled = false;
+                submitBtn2.disabled = false;
+            }
+        });
+    });
+</script>
+
+
+{% endblock %}

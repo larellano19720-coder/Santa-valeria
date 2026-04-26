@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}CLIENTE{% endblock %}
+{% block body %}
+<!--**********************************
+            Content body start
+        ***********************************-->
+{% block head %}CATALOGO{% endblock %}
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row" style="padding-right: 0 !important;">
+            <div class="col-sm-12 col-xl-12 col-xxl-12" style="padding-right: 0 !important;">
+                <div class="card">
+                    <div class="card-header d-block d-sm-flex border-0">
+                        <div class="me-3">
+                            <h4 class="card-title mb-2">
+                                <a href="{% url 'catalogo:T_Corral'%}">
+                                    <i class="bi bi-arrow-left-circle text-black fs-28"></i>
+                                </a>
+                                <b>EDITAR CORRAL #{{TECorrales.ID}}</b>
+                            </h4>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="card-body tab-content px-4 pt-2">
+                        <div class="tab-pane active show fade" id="monthly" role="tabpanel">
+                            <form action="{% url 'catalogo:A_Corral'%}" method="POST" autocomplete="off">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <input type="hidden" name="id" value="{{TECorrales.ID}}">
+                                    <input type="hidden" name="clave" value="{{TECorrales.Clave}}">
+                                    <input type="hidden" class="form-control" name="tecnico"
+                                        value="{{ user.first_name }} {{user.last_name}}">
+                                    <div class="row">
+                                        <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4 mb-3">
+                                            <h6 class="h6-form">CORRAL *</h6>
+                                            <input type="text" name="corral" value="{{TECorrales.Descripcion}}"
+                                                class="form-control input" placeholder="Ingrese el nombre del corral"
+                                                required>
+                                        </div>
+                                        <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4 mb-3">
+                                            <h6 class="h6-form">ESTATUS *</h6>
+                                            <select class="select2 form-control col-12" name="estatus" required>
+                                                <option value="{{FiltradoEstatus.ID}}">
+                                                    --------{{FiltradoEstatus.Descripcion}}--------
+                                                </option>
+                                                {% for Estatus in FEEstatus %}
+                                                <option value="{{ Estatus.ID }}">{{ Estatus.Descripcion }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                       
+                                        <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4 mb-3">
+                                            <h6 class="h6-form">FECHA *</h6>
+                                            <input class="form-control" type="datetime-local"
+                                                value="{{ fecha|date:'Y-m-d H:i' }}" name="fecha" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <!-- <div class="col-sm-12 col-md-4 col-lg-6 col-xl-6 mb-3">
+                                            <h6 class="h6-form">CLIENTE *</h6>
+                                            <select class="select2 form-control col-12" name="cliente" required>
+                                                <option value="{{FiltradoCliente.ID}}">
+                                                    --------{{FiltradoCliente.Nombre}}--------
+                                                </option>
+                                                {% for Cliente in FECliente %}
+                                                <option value="{{ Cliente.ID }}">{{ Cliente.Nombre }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div> -->
+                                         <!-- <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4 mb-3">
+                                            <h6 class="h6-form">CAPACIDAD *</h6>
+                                            <input type="number" name="capacidad" value="{{TECorrales.Capacidad}}"
+                                                class="form-control input"
+                                                placeholder="Ingrese la capacidad para los corrales" required>
+                                        </div> -->
+                                    </div>
+                                    <div class="form-group grupo-botones">
+                                        <button type="submit" class="btn-editar" name="agregar" id="agregarBoton">
+                                            ✎ Actualizar
+                                        </button>
+                                        <a href="{% url 'catalogo:T_Corral' %}" class="btn-cancelar">
+                                            ❌ Cancelar
+                                        </a>
+                                    </div>
+                                   
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

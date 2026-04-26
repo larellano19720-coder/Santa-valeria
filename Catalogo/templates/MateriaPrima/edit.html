@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}CLIENTE{% endblock %}
+{% block body %}
+<!--**********************************
+            Content body start
+        ***********************************-->
+{% block head %}CATALOGO{% endblock %}
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row" style="padding-right: 0 !important;">
+            <div class="col-sm-12 col-xl-12 col-xxl-12" style="padding-right: 0 !important;">
+                <div class="card">
+                    <div class="card-header d-block d-sm-flex border-0">
+                        <div class="me-3">
+                            <h4 class="card-title mb-2">
+                                <a href="{% url 'catalogo:T_MateriaPrima'%}">
+                                    <i class="bi bi-arrow-left-circle text-black fs-28"></i>
+                                </a>
+                                <b>EDITAR MATERIA PRIMA #{{TEMateriaPrima.Clave}}</b>
+                                
+                            </h4>
+                            
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="card-body tab-content px-4 pt-2">
+                        <div class="tab-pane active show fade" id="monthly" role="tabpanel">
+                            <form action="{% url 'catalogo:A_MateriaPrima'%}" method="POST" autocomplete="off">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <input type="hidden" name="id" value="{{TEMateriaPrima.ID}}">
+                                    <input type="hidden" name="clave" value="{{TEMateriaPrima.Clave}}">
+                                    <input type="hidden" class="form-control" name="tecnico"
+                                        value="{{ user.first_name }} {{user.last_name}}">
+                                    <div class="row">
+                                        <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-3">
+                                            <h6 class="h6-form">MATERIA PRIMA *</h6>
+                                            <input type="text" name="materia" value="{{TEMateriaPrima.Descripcion}}"
+                                                class="form-control input" placeholder="Ingrese la materia prima"
+                                                required>
+                                        </div>
+                                        <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4 mb-3">
+                                            <h6 class="h6-form">PRECIO UNITARIO *</h6>
+                                            <input type="number" name="precio" value="{{TEMateriaPrima.PrecioUnitario}}"
+                                                class="form-control input" placeholder="Ingrese el precio unitario"
+                                                required step="0.01">
+                                        </div>
+                                        <div class="col-sm-12 col-md-12 col-lg-2 col-xl-2 mb-3">
+                                            <h6 class="h6-form">MERMA *</h6>
+                                            <input type="number" name="merma" value="{{TEMateriaPrima.Merma}}"
+                                                class="form-control input" placeholder="Ingrese la merma" required
+                                                step="0.01">
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-sm-12 col-md-4 col-lg-6 col-xl-6 mb-3">
+                                            <h6 class="h6-form">ESTATUS *</h6>
+                                            <select class="select2 form-control col-12" name="estatus" required>
+                                                <option value="{{FiltradoEstatus.ID}}">
+                                                    --------{{FiltradoEstatus.Descripcion}}--------
+                                                </option>
+                                                {% for Estatus in FEEstatus %}
+                                                <option value="{{ Estatus.ID }}">{{ Estatus.Descripcion }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <div class="col-sm-12 col-md-4 col-lg-6 col-xl-6 mb-3">
+                                            <h6 class="h6-form">UNIDAD MEDIDA *</h6>
+                                            <select class="select2 form-control col-12" name="unidad" required>
+                                                <option value="{{FiltradoUnidad.ID}}">
+                                                    --------{{FiltradoUnidad.Descripcion}}--------
+                                                </option>
+                                                {% for Unidad in FEUnidad %}
+                                                <option value="{{ Unidad.ID }}">{{ Unidad.Descripcion }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group grupo-botones">
+                                        <button type="submit" class="btn-editar" name="agregar" id="agregarBoton">
+                                            ✎ Actualizar
+                                        </button>
+                                        <a href="{% url 'catalogo:T_MateriaPrima' %}" class="btn-cancelar">
+                                            ❌ Cancelar
+                                        </a>
+                                    </div>
+                                  
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

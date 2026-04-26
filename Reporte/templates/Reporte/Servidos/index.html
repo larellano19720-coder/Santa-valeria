@@ -1,0 +1,231 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}CLIENTE{% endblock %}
+{% block body %}
+<!--**********************************
+            Content body start
+        ***********************************-->
+{% block head %}REPORTE{% endblock %}
+{% block generar %}
+<li class="nav-item ocultar">
+    <button type="button" class="btn btn-primary d-sm-inline-block d-none" data-bs-toggle="modal"
+        data-bs-target="#exampleModal"> GENERAR REPORTE <i class="las la-signal ms-3 scale5"></i>
+    </button>
+</li>
+{% endblock %}
+
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row" style="padding-right: 0 !important;">
+            <div class="col-sm-12 col-xl-12 col-xxl-12" style="padding-right: 0 !important;">
+                <div class="card">
+                    <div class="card-header d-block  border-0">
+                        <div class="row">
+                            <div class="col-6">
+                                <h4 class="card-title mb-1 d-flex align-items-center">
+                                    <a href="{% url 'aplicacion:Menu_Presentacion' %}#Catalogo" class="me-2">
+                                        <i class="bi bi-arrow-left-circle text-black fs-28"></i>
+                                    </a>
+                                    <b>REPPORTE MOVIMIENTO DE SERVIDOS</b>
+                                </h4>
+
+                            </div>
+
+                            <!-- BOTÓN -->
+
+                            <div class="col-6 d-flex justify-content-md-end justify-content-start mt-3 mt-md-0">
+                                {% if Fecha %}
+                                <div class="btn-group ml-4" role="group" aria-label="Basic example">
+                                    <form action="{% url 'descargas:PDF_Reportes_Mov_Servidos' %}" method="POST">
+                                        {% csrf_token %}
+                                        <input type="hidden" value="{{Fecha}}" name="fecha1">
+                                        <input type="hidden" value="{{Fecha2}}" name="fecha2">
+                                        <input type="hidden" value="0" name="reporte-liquidacion-servidos">
+                                        <button type="submit" class="pdf">📄 Exportar PDF</button>
+                                    </form>
+                                    <!-- <button type="button" class="btn btn-secondary">Middle</button> -->
+                                    <form action="{% url 'descargas:exportar_servido_corral' %}" method="POST">
+                                        {% csrf_token %}
+                                        <input type="hidden" value="{{Fecha}}" name="fecha1">
+                                        <input type="hidden" value="{{Fecha2}}" name="fecha2">
+                                        <input type="hidden" value="0" name="reporte-liquidacion-servidos">
+                                        <button type="submit" class="excel">📗 Exportar Excel
+                                        </button>
+                                    </form>
+
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-body tab-content p-0">
+                        <div class="tab-pane active show fade" id="monthly" role="tabpanel">
+                            <div class="table-responsive">
+                                <table class="table table-responsive-md card-table transactions-table">
+                                    <thead>
+                                        <tr>
+
+                                            <th class="text-black fs-16 font-w600 th-responsive">
+                                                PORCENTAJE
+                                            </th>
+                                            <th class="text-black fs-16 font-w600 th-responsive">
+                                                CORRAL
+                                            </th>
+                                            <th class="text-black fs-16 font-w600 th-responsive">
+                                                FORMULA
+                                            </th>
+                                            <th class="text-black fs-16 font-w600 th-responsive">
+                                                CABEZAS POR CORRAL
+                                            </th>
+                                            <th class="text-black fs-16 font-w600 th-responsive">
+                                                KILOS SOLICITADOS
+                                            </th>
+                                            <th class="text-black fs-16 font-w600 th-responsive">
+                                                SERVIDA MAÑANA
+                                            </th>
+                                            <th class="text-black fs-16 font-w600 th-responsive">
+                                                SERVIDA TARDE
+                                            </th>
+                                            <th class="text-black fs-16 font-w600 th-responsive">
+                                                TOTAL SERVIDO
+                                            </th>
+                                            <th class="text-black fs-16 font-w600 th-responsive">
+                                                KILOS POR CABEZA
+                                            </th>
+                                            <th class="text-black fs-16 font-w600 th-responsive">
+                                                FECHA SOLICITADA.
+                                            </th>
+                                            <th class="text-black fs-16 font-w600 th-responsive">
+                                                FECHA SER DES.
+                                            </th>
+                                            <th class="text-black fs-16 font-w600 th-responsive">
+                                                FECHA SER CENA.
+                                            </th>
+
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for Dato in reportes %}
+                                        <tr>
+                                            <td>
+                                                <span class="fs-16 text-black font-w400">
+                                                    {{Dato.0}} %
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <span class="fs-16 text-black font-w400">
+                                                    {{ Dato.1}}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <span class="fs-16 text-black font-w400">
+                                                    {{ Dato.2}}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <span class="fs-16 text-black font-w400">
+                                                    {{ Dato.3 }}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <span class="fs-16 text-black font-w400">
+                                                    {{ Dato.4 }} Kg
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <span class="fs-16 text-black font-w400">
+                                                    {{ Dato.5 }} Kg
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <span class="fs-16 text-black font-w400">
+                                                    {{ Dato.6 }} Kg
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <span class="fs-16 text-black font-w400">
+                                                    {{ Dato.7 }} Kg
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <span class="fs-16 text-black font-w400">
+                                                    {{ Dato.8 }} Kg
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <span class="fs-16 text-black font-w400">
+                                                    {{ Dato.9 }}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <span class="fs-16 text-black font-w400">
+                                                    {{ Dato.10 }}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <span class="fs-16 text-black font-w400">
+                                                    {{ Dato.11 }}
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-xl">
+                        <form id="pedido" action="{% url 'reporte:T_Reporte' %}" method="POST">{% csrf_token %}
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">REPORTE SERVIDOS</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="card m-4 p-5">
+                                        <div class="row">
+                                            <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-3">
+                                                <h6 class="h6-form">FECHA DE INICIO</h6>
+                                                {% if Fecha is none %}
+                                                <input type="date" name="fecha1" value="{{FechaDeHoy}}"
+                                                    class="form-control" required>
+                                                {% else %}
+                                                <input type="date" name="fecha1" class="form-control"
+                                                    style=" border-radius: 0;" value="{{Fecha}}">
+                                                {% endif %}
+                                            </div>
+                                            <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6 mb-3">
+                                                <h6 class="h6-form">FECHA FINAL</h6>
+                                                {% if Fecha2 is none %}
+                                                <input type="date" name="fecha2" value="{{FechaDeHoy}}"
+                                                    class="form-control" required>
+                                                {% else %}
+                                                <input type="date" name="fecha2" class="form-control"
+                                                    style=" border-radius: 0;" value="{{Fecha2}}">
+                                                {% endif %}
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">CERRAR</button>
+                                    <button id="boton-buscar" type="submit" class="btn btn-success"><i
+                                            class="bi bi-search mr-5"></i> GENERAR REPORTE</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

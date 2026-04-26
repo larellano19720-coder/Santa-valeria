@@ -1,0 +1,206 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}TOLVA{% endblock %}
+{% block body %}
+<!--**********************************
+            Content body start
+        ***********************************-->
+{% block head %}PROCESO{% endblock %}
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="card">
+            <div class="card-header d-block d-sm-flex border-0">
+                <h4 class="card-title mb-1 d-flex align-items-center">
+                    <a href="{% url 'aplicacion:Menu_Presentacion' %}#Proceso" class="me-2">
+                        <i class="bi bi-arrow-left-circle text-black fs-28"></i>
+                    </a>
+                    <b>TABLA VEHICULOS</b>
+                </h4>
+            </div>
+
+
+            <div class="card-body tab-content p-0">
+                <div class="tab-pane active show fade" id="monthly" role="tabpanel">
+                    <div class="table-responsive">
+                        <table class="table table-responsive-md card-table transactions-table" id="miTabla">
+                            <thead>
+                                <tr>
+                                    <th class="text-black fs-16 font-w600 th-responsive">
+                                        DESCRIPCIÓN
+                                    </th>
+                                    <th class="text-black fs-16 font-w600 th-responsive">
+                                        PRODUCTO
+                                    </th>
+                                    <th class="text-black fs-16 font-w600 th-responsive">
+                                        ESTATUS
+                                    </th>
+                                    <th class="text-black fs-16 font-w600 th-responsive">
+                                        ACCIONES
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for Dato in TTolva %}
+                                <tr>
+                                    <td>
+                                        <span class="fs-16 text-black font-w400">
+                                            {{Dato.Alias}}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="fs-16 text-black font-w400">
+                                            {{Dato.IDProducto_id__Descripcion}}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="fs-16 text-black font-w400">
+                                            {{Dato.IDEstatus_id__Descripcion}}
+                                        </span>
+                                    </td>
+                                    {% if Dato.IDProducto_id != 1 %}
+                                    <td>
+
+                                        <div class="row">
+                                            <div class="col-sm-12 col-md-2 col-lg-2">
+                                                <form action="{% url 'descargas:PDF_Tolva' %}" method="POST">{% csrf_token %}
+                                                    <input type="hidden" value="{{Dato.ID}}" name="tolva">
+                                                    <button class="Btn" type="submit">
+                                                        <svg class="svgIcon" viewBox="0 0 384 512" height="1em">
+                                                            <path
+                                                                d="M169.4 470.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 370.8 224 64c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 306.7L54.6 265.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z">
+                                                            </path>
+                                                        </svg>
+                                                    </button>
+                                                </form>
+                                            </div>
+                                            <div class="col-sm-12 col-md-10 col-lg-10">
+                                                <div class="accordion">
+                                                    <div class="accordion-item">
+                                                        <input type="checkbox" id="{{Dato.ID}}"
+                                                            class="accordion-checkbox">
+                                                        <label for="{{Dato.ID}}" class="accordion-title">MOSTRAR
+                                                            PEDIDO</label>
+                                                        <div class="accordion-content ">
+                                                            <table
+                                                                class="table-responsive-md card-table transactions-table"
+                                                                id="miTabla">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th
+                                                                            class="text-black fs-16 font-w600 th-responsive">
+                                                                            {% if Dato.IDEstatus_id == 4 %}
+                                                                            CORRAL
+                                                                            {% else %}
+                                                                            MATERIA PRIMA
+                                                                            {% endif %}
+                                                                        </th>
+                                                                        <th
+                                                                            class="text-black fs-16 font-w600 th-responsive">
+                                                                            CANTIDAD
+                                                                        </th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    {% if Dato.IDEstatus_id == 4 %}
+                                                                    {% for Servido in TServido %}
+                                                                    {% if Servido.IDTolva_id == Dato.ID %}
+                                                                    <tr>
+                                                                        <td>
+                                                                            <span class="fs-16 text-black font-w400">
+                                                                                {{ Servido.IDCorral_id__Descripcion }}
+                                                                            </span>
+                                                                        </td>
+                                                                        <td>
+                                                                            <span class="fs-16 text-black font-w400">
+                                                                                {{ Servido.CantidadSolicitada }}
+                                                                                {% if Servido.IDProducto_id == 14 %}
+                                                                                Paca
+                                                                                {% else %}
+                                                                                Kg
+                                                                                {% endif %}
+                                                                            </span>
+                                                                        </td>
+                                                                    </tr>
+                                                                    {% endif %}
+                                                                    {% endfor %}
+                                                                    {% else %}
+                                                                    {% for Formulado in TFormulado %}
+                                                                    <tr>
+                                                                        <td>
+                                                                            <span class="fs-16 text-black font-w400">
+                                                                                {{ Formulado.IDMateriaPrima__Descripcion }}
+                                                                            </span>
+                                                                        </td>
+                                                                        <td>
+                                                                            <span class="fs-16 text-black font-w400">
+                                                                                {{ Formulado.CantidadSolicitada }}                                                                              
+                                                                            </span>
+                                                                        </td>
+                                                                    </tr>                                                                    
+                                                                    {% endfor %}
+                                                                    {% endif %}         
+                                                                </tbody>
+                                                            </table>
+                                                            <div class="col-12 my-2">
+                                                                {% if Dato.IDEstatus_id == 4 %}
+                                                                <form action="{% url 'proceso:A_Pedido_Tolva' %}"
+                                                                    method="POST"
+                                                                    style="display: flex; flex-direction: row; justify-content: center; gap: 5px;">
+                                                                    {% csrf_token %}
+                                                                    <input type="hidden" value="{{Dato.ID}}" name="id">
+                                                                    <div class="col-6">
+                                                                        <button type="submit" name="cargamento-tolva"
+                                                                            value="Cancelado"
+                                                                            class="btn btn-danger btn-sm">CANCELAR
+                                                                            PEDIDO</button>
+                                                                    </div>
+                                                                    <div class="col-6">
+                                                                        <button type="submit" name="cargamento-tolva"
+                                                                            value="Terminado"
+                                                                            style="background-color: rgb(19, 93, 163); border: 0;"
+                                                                            class="btn btn-danger btn-sm">TERMINAR
+                                                                            PEDIDO</button>
+                                                                    </div>
+                                                                </form>
+                                                                {% else %}
+                                                                <form action="{% url 'proceso:A_Pedido_Formulado' %}"
+                                                                    method="POST"
+                                                                    style="display: flex; flex-direction: row; justify-content: center; gap: 5px;">
+                                                                    {% csrf_token %}
+                                                                    <input type="hidden" value="{{Dato.ID}}" name="id">
+                                                                    <div class="col-6">
+                                                                        <button type="submit" name="cargamento-tolva"
+                                                                            value="Cancelado"
+                                                                            class="btn btn-danger btn-sm">CANCELAR
+                                                                            PEDIDO</button>
+                                                                    </div>
+                                                                    <div class="col-6">
+                                                                        <button type="submit" name="cargamento-tolva"
+                                                                            value="Terminado"
+                                                                            style="background-color: rgb(19, 93, 163); border: 0;"
+                                                                            class="btn btn-danger btn-sm">TERMINAR
+                                                                            PEDIDO</button>
+                                                                    </div>
+                                                                </form>                                                                
+                                                                {% endif %}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    {% else %}
+                                    <td>No se encontraron servidos para {{Tolva.Alias}}</td>
+                                    {% endif %}
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% endblock %}
