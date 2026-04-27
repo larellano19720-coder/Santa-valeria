@@ -60,7 +60,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'Ganadera.urls'
-CSRF_TRUSTED_ORIGINS = ['https://santa-valeria-production.up.railway.app/']
+CSRF_TRUSTED_ORIGINS = ['https://santa-valeria-production.up.railway.app']
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -84,32 +84,32 @@ WSGI_APPLICATION = 'Ganadera.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'prueba',
-#         'USER': 'root',
-#         'PASSWORD': 'geteo393',
-#         'HOST': '127.0.0.1',
-#         'PORT': '3306',
-#         'OPTIONS': {
-#             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
-#         },        
-#     }
-# }
 DATABASES = {
-   'default': {
-       'ENGINE': 'django.db.backends.mysql',
-       'NAME': 'railway',
-       'USER': 'root',
-       'PASSWORD': 'YfAPOvAvkRlVzzePJZSIzVsMEJpzALvp',
-       'HOST': 'mysql.railway.internal',
-       'PORT': '3306',
-       'OPTIONS': {
-           'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
-       },        
-   }
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'prueba',
+        'USER': 'root',
+        'PASSWORD': 'geteo393',
+        'HOST': '127.0.0.1',
+        'PORT': '3306',
+        'OPTIONS': {
+            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+        },        
+    }
 }
+# DATABASES = {
+#    'default': {
+#        'ENGINE': 'django.db.backends.mysql',
+#        'NAME': 'railway',
+#        'USER': 'root',
+#        'PASSWORD': 'YfAPOvAvkRlVzzePJZSIzVsMEJpzALvp',
+#        'HOST': 'mysql.railway.internal',
+#        'PORT': '3306',
+#        'OPTIONS': {
+#            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+#        },        
+#    }
+# }
 # DATABASES = {
 #    'default': {
 #        'ENGINE': 'django.db.backends.mysql',
